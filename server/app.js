@@ -1,17 +1,27 @@
 const express = require('express');
-const app = express();
 const dotenv = require('dotenv');
+dotenv.config();
+
+const app = express();
 const cors = require('cors')
-const route = require('./routes/route');
+const loginRouter = require('./routes/loginRoute');
+const postRouter = require('./routes/postRouter');
+const userRouter = require('./routes/userRouter');
+const db = require('./models');
 
 app.use(express.json());
 app.use(cors());
-dotenv.config();
 
-const port = process.env.PORT;
+app.listen(process.env.PORT)
+console.log(`Server running on http://localhost: ${ process.env.PORT }`);
 
-app.use('/', route);
+db.sequelize.authenticate()
+	.then(() => db.sequelize.sync({ alter: true }))
+	.then(() => {
+		console.log('DB connection successful');
+	})
+	.catch((err) => console.error(err));
 
-app.listen(port, function () {
-	console.log('Example app listening on port : ' + port);
-});
+app.use('/posts', postRouter);
+app.use('/login', loginRouter);
+app.use('/users', userRouter);
