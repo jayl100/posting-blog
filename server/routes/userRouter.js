@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// 마이페이지 - 회원정보
+// 마이페이지
 router.get('/account', (req, res) => {
 	res.json({ message: 'get 회원정보 account!' });
 });
@@ -9,11 +9,6 @@ router.get('/account', (req, res) => {
 // 마이페이지 - 비밀번호 수정
 router.put('/account', (req, res) => {
 	res.json({ message: 'put account!' });
-});
-
-// 마이페이지 - 내 게시글 조회
-router.get('/account', (req, res) => {
-	res.json({ message: 'get 게시글 account!' });
 });
 
 // 마이페이지 - 탈퇴
