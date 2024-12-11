@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
 			validate: {
 				isEmail: true
 			}
@@ -30,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
 		},
 		password: {
 			type: DataTypes.STRING,
@@ -40,6 +38,14 @@ module.exports = (sequelize, DataTypes) => {
 		sequelize,
 		modelName: 'User',
 		tableName: 'Users',
+		indexes: [
+			{
+				unique: true,
+				fields: ['email', 'name'],
+				name: 'uniqueEmailName',
+			}
+		]
+		
 	});
 	return User;
 };

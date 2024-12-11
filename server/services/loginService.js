@@ -1,15 +1,16 @@
-const {User} = require('../models');
+const { User } = require('../models');
+const generateHashPassword = require('../utils/auth');
 
+// User = email, name, password(hashPassword)
+
+// 회원가입
 const signupService = async ({ email, name, password }) => {
 	
-	const hashedPassword = password;
+	const hashedPassword = await generateHashPassword({ password });
 	
-	const newUser = await User.create({
+	return await User.create({
 		email, name, password: hashedPassword
 	});
-	return newUser;
 }
-
-
 
 module.exports = signupService;

@@ -16,7 +16,7 @@ app.listen(process.env.PORT)
 console.log(`Server running on http://localhost: ${ process.env.PORT }`);
 
 db.sequelize.authenticate()
-	.then(() => db.sequelize.sync({ alter: true }))
+	.then(() => db.sequelize.sync())
 	.then(() => {
 		console.log('DB connection successful');
 	})
