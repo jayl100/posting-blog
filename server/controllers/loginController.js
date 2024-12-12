@@ -1,4 +1,4 @@
-const { signupService, loginService } = require('../services/loginService');
+const { signupService, loginService, logoutService } = require('../services/loginService');
 const { StatusCodes } = require('http-status-codes');
 const { accessToken } = require("../utils/auth");
 
@@ -38,13 +38,32 @@ const login = async (req, res) => {
 		if (err.message === 'Service : 이메일과 비밀번호를 다시 확인해주세요.') {
 			return res.status(StatusCodes.BAD_REQUEST).send('Controller: fail login');
 		}
-		console.error();
+		console.error(err);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('서버 에러');
 	}
 }
 
+const logout = async (req, res) => {
+	try {
+		const accessToken = req.headers.authorization;
+		
+		if (accessToken) {
+			const refreshToken = req.headers.cookie;
+			await logoutService(refreshToken);
+			
+			return res.status(StatusCodes.OK).send('로그아웃 성공');
+		}
+		return res.status(StatusCodes.BAD_REQUEST).send('Controller: fail logout');
+		
+	} catch (err) {
+		console.error(err);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('서버 에러');
+		
+	}
+}
 
-module.exports = { signup, login };
+
+module.exports = { signup, login, logout };
 
 // 필요사항
 // - 동일한 email, name이 있을 경우 회원가입 제한.

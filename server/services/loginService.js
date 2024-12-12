@@ -1,5 +1,6 @@
 const { User, Token } = require('../models');
 const { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken } = require('../utils/auth');
+const req = require("express/lib/request");
 
 // User = email, name, password(hashPassword)
 
@@ -30,7 +31,7 @@ const signupService = async ({ email, name, password }) => {
 	}
 }
 
-// 로그인 성공 시 토큰 발행
+// 로그인
 const loginService = async function (userInfo) {
 	
 	try {
@@ -40,7 +41,7 @@ const loginService = async function (userInfo) {
 			const accessToken = await generateAccessToken(userInfo)
 			const refreshToken = await generateRefreshToken(userInfo)
 			
-			// 존재하면 업데이트, 없으면 생성
+			// 토큰 존재하면 업데이트, 없으면 생성
 			await Token.upsert({
 				userId: existedEmail.id,
 				token: refreshToken,
@@ -58,4 +59,18 @@ const loginService = async function (userInfo) {
 	}
 }
 
-module.exports = {signupService, loginService};
+
+const logoutService = async (refreshToken) => {
+	const token = refreshToken.split('=')[1];
+	
+	try {
+		const userToken = await Token.findOne({ where: { token: token } });
+		return await Token.destroy({ where: { userId: userToken.userId } });
+		
+	} catch (err) {
+		console.error(err);
+		throw err;
+	}
+}
+
+module.exports = { signupService, loginService, logoutService };
