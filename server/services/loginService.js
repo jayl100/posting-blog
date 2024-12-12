@@ -1,5 +1,5 @@
-const { User } = require('../models');
-const { generateHashPassword, matchPassword } = require('../utils/auth');
+const { User, Token } = require('../models');
+const { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken } = require('../utils/auth');
 
 // User = email, name, password(hashPassword)
 
@@ -31,13 +31,23 @@ const signupService = async ({ email, name, password }) => {
 }
 
 // 로그인 성공 시 토큰 발행
-const loginService = async function ({ email, password }) {
+const loginService = async function (userInfo) {
 	
 	try {
-		const existedEmail = await User.findOne({ where: { email: email } });
+		const existedEmail = await User.findOne({ where: { email: userInfo.email } });
 		
-		if (existedEmail && await matchPassword({email, password})) {
-			return true;
+		if (existedEmail && await matchPassword(userInfo)) {
+			const accessToken = await generateAccessToken(userInfo)
+			const refreshToken = await generateRefreshToken(userInfo)
+			
+			// 존재하면 업데이트, 없으면 생성
+			await Token.upsert({
+				userId: existedEmail.id,
+				token: refreshToken,
+			})
+
+			return { accessToken: accessToken, refreshToken: refreshToken };
+			
 		} else {
 			throw new Error ('Service : 이메일과 비밀번호를 다시 확인해주세요.')
 		}

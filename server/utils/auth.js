@@ -1,6 +1,14 @@
 const { User } = require('../models');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const bcrypt = require('bcrypt');
+const { env } = require("process");
 const saltRounds = 10;
+
+// bcrypt = 계정 암호
+// crypto = 토큰
 
 // bcrypt 암호화
 const generateHashPassword = async ({ password }) => {
@@ -17,8 +25,6 @@ const generateHashPassword = async ({ password }) => {
 }
 
 const matchPassword = async ({ email, password }) => {
-	// {password} = 1234
-	// User.password = hashedPassword
 	
 	try {
 		const matchPerson = await User.findOne({ where: { email } })
@@ -36,5 +42,29 @@ const matchPassword = async ({ email, password }) => {
 	
 }
 
+const generateAccessToken = async ({ email, password }) => {
+	try {
+		const data = { email: email, password: password };
+		const token = jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1d', issuer: process.env.JWT_ISUER });
+		
+		return token;
+		
+	} catch (err) {
+		throw new Error('accessToken', err);
+	}
+}
 
-module.exports = { generateHashPassword, matchPassword };
+const generateRefreshToken = async ({ email, password }) => {
+	try {
+		const data = { email: email, password: password };
+		const token = jwt.sign(data, process.env.JWT_REFRESH_KEY, { expiresIn: '1d', issuer: process.env.JWT_ISUER });
+		
+		return token;
+		
+	} catch (err) {
+		throw new Error('refreshToken', err);
+	}
+}
+
+
+module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken };

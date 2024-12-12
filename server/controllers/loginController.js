@@ -1,5 +1,6 @@
 const { signupService, loginService } = require('../services/loginService');
 const { StatusCodes } = require('http-status-codes');
+const { accessToken } = require("../utils/auth");
 
 // 회원가입
 const signup = async (req, res) => {
@@ -22,9 +23,17 @@ const login = async (req, res) => {
 	const userInfo = req.body; // email, password
 	
 	try {
-		if (await loginService(userInfo)) {
-			return res.status(200).send('로그인 성공');
+		const token = await loginService(userInfo);
+		
+		if (token) {
+			console.log('token : ', token)
+			res.header('Authorization', `Bearer ${token.accessToken}`);
+			res.cookie('refreshToken', token.refreshToken, {
+				httpOnly: true,
+			});
+			return res.status(StatusCodes.OK).send('로그인 성공');
 		}
+
 	} catch (err) {
 		if (err.message === 'Service : 이메일과 비밀번호를 다시 확인해주세요.') {
 			return res.status(StatusCodes.BAD_REQUEST).send('Controller: fail login');

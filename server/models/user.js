@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: 'userId',
 				sourceKey: 'id'
 			})
+			User.hasOne(models.Token, {
+				foreignKey: 'userId',
+				sourceKey: 'id'
+			})
 		}
 	}
 	
@@ -45,7 +49,6 @@ module.exports = (sequelize, DataTypes) => {
 				name: 'uniqueEmailName',
 			}
 		]
-		
 	});
 	return User;
 };
