@@ -1,3 +1,4 @@
+const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -15,4 +16,25 @@ const generateHashPassword = async ({ password }) => {
 	}
 }
 
-module.exports = generateHashPassword;
+const matchPassword = async ({ email, password }) => {
+	// {password} = 1234
+	// User.password = hashedPassword
+	
+	try {
+		const matchPerson = await User.findOne({ where: { email } })
+		
+		if (matchPerson) {
+			const match = await bcrypt.compare(password, matchPerson.password);
+			
+			return match;
+		}
+		return console.log('not match');
+		
+	} catch (err) {
+		throw new Error('matchPassword', err);
+	}
+	
+}
+
+
+module.exports = { generateHashPassword, matchPassword };

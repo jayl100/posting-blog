@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const loginController = require('../controllers/loginController');
+const {signup,login} = require('../controllers/loginController');
 
 // 회원가입
-router.post('/signup', loginController);
+router.post('/signup', signup);
 
 // 로그인
-router.post('/', (req, res) => {
-	res.json({ message: 'login!' });
-});
+router.post('/', login);
 
 // 로그아웃
 router.delete('/logout', (req, res) => {
