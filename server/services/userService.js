@@ -1,6 +1,5 @@
 const { User, Token } = require('../models');
 const { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken } = require('../utils/auth');
-const req = require("express/lib/request");
 
 // User = email, name, password(hashPassword)
 
@@ -38,8 +37,8 @@ const loginService = async function (userInfo) {
 		const existedEmail = await User.findOne({ where: { email: userInfo.email } });
 		
 		if (existedEmail && await matchPassword(userInfo)) {
-			const accessToken = await generateAccessToken(userInfo)
-			const refreshToken = await generateRefreshToken(userInfo)
+			const accessToken = await generateAccessToken(existedEmail.id)
+			const refreshToken = await generateRefreshToken(existedEmail.id)
 			
 			// 토큰 존재하면 업데이트, 없으면 생성
 			await Token.upsert({

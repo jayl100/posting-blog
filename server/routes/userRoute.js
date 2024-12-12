@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {signup, login, logout} = require('../controllers/loginController');
+const {signup, login, logout} = require('../controllers/userController');
 
 // 회원가입
 router.post('/signup', signup);

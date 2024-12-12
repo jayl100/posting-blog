@@ -4,9 +4,9 @@ dotenv.config();
 
 const app = express();
 const cors = require('cors')
-const loginRouter = require('./routes/loginRoute');
+const loginRouter = require('./routes/userRoute');
 const postRouter = require('./routes/postRouter');
-const userRouter = require('./routes/userRouter');
+const userRouter = require('./routes/mypageRouter');
 const db = require('./models');
 
 app.use(express.json());

@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { list, write, deleting } = require('../controllers/postController');
 
 // 게시판 리스트
-router.get('/', (req, res) => {
-	res.json({ message: 'posts list' });
-});
+router.get('/', list);
 
 // 글쓰기
-router.post('/write', (req, res) => {
-	res.json({ message: 'write!' });
-});
+router.post('/write', write);
 
 // 게시글
 router.get('/:id', (req, res) => {
@@ -22,8 +19,6 @@ router.put('/:id', (req, res) => {
 });
 
 // 게시글 삭제
-router.delete('/:id', (req, res) => {
-	res.json({ message: '게시글 삭제!' });
-});
+router.delete('/:id', deleting);
 
 module.exports = router;

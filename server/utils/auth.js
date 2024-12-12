@@ -24,6 +24,7 @@ const generateHashPassword = async ({ password }) => {
 	}
 }
 
+// 로그인 시 비밀번호 매칭
 const matchPassword = async ({ email, password }) => {
 	
 	try {
@@ -42,9 +43,10 @@ const matchPassword = async ({ email, password }) => {
 	
 }
 
-const generateAccessToken = async ({ email, password }) => {
+// 토큰 생성
+const generateAccessToken = async (id) => {
 	try {
-		const data = { email: email, password: password };
+		const data = { id: id };
 		const token = jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1d', issuer: process.env.JWT_ISUER });
 		
 		return token;
@@ -54,9 +56,10 @@ const generateAccessToken = async ({ email, password }) => {
 	}
 }
 
-const generateRefreshToken = async ({ email, password }) => {
+// 리프레시 토큰 생성
+const generateRefreshToken = async (id) => {
 	try {
-		const data = { email: email, password: password };
+		const data = { id: id };
 		const token = jwt.sign(data, process.env.JWT_REFRESH_KEY, { expiresIn: '1d', issuer: process.env.JWT_ISUER });
 		
 		return token;
@@ -67,4 +70,16 @@ const generateRefreshToken = async ({ email, password }) => {
 }
 
 
-module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken };
+const verifyAccessToken = async (token, secret) => {
+	
+	try {
+		const payload = jwt.verify(token, secret);
+		
+		return payload;
+	} catch (err) {
+		console.error(err);
+		throw new Error('Unauthorized');
+	}
+}
+
+module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken, verifyAccessToken };
