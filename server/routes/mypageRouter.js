@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { userInfo, userPosts, userDelete } = require('../controllers/mypageController');
+const { userInfo, userPosts, userDelete, updatePassword } = require('../controllers/mypageController');
 const { authMiddleware } = require('../middlewares/authMiddleware');
 
 
@@ -13,9 +13,7 @@ router.get('/mypage', userInfo);
 router.get('/mypage/posts', userPosts);
 
 // 마이페이지 - 비밀번호 수정
-router.put('/mypage/password', (req, res) => {
-  res.json({ message: 'put account!' });
-});
+router.put('/mypage/password', updatePassword);
 
 // 마이페이지 - 탈퇴
 router.delete('/mypage', userDelete);

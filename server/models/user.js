@@ -14,16 +14,18 @@ module.exports = (sequelize, DataTypes) => {
 			User.hasMany(models.Posts, {
 				foreignKey: 'userId',
 				sourceKey: 'id',
-				onDelete: "cascade",
+				onDelete: 'CASCADE',
+				hooks: true,
 			})
 			User.hasOne(models.Token, {
 				foreignKey: 'userId',
 				sourceKey: 'id',
-				onDelete: "cascade",
+				onDelete: 'CASCADE',
+				hooks: true,
 			})
 		}
 	}
-	
+
 	User.init({
 		email: {
 			type: DataTypes.STRING,

@@ -7,7 +7,7 @@ const saltRounds = 10;
 // crypto = 토큰
 
 // bcrypt 암호화
-const generateHashPassword = async ({ password }) => {
+const generateHashPassword = async (password) => {
   try {
     const passwordString = password.toString();
     const salt = await bcrypt.genSalt(saltRounds);
@@ -20,12 +20,12 @@ const generateHashPassword = async ({ password }) => {
 };
 
 // 로그인 시 비밀번호 매칭
-const matchPassword = async ({ email, password }) => {
+const matchPassword = async (userInfo) => {
   try {
-    const matchPerson = await User.findOne({ where: { email } });
+    const matchPerson = await User.findOne({ where: { email: userInfo.email } });
 
     if (matchPerson) {
-      const match = await bcrypt.compare(password, matchPerson.password);
+      const match = await bcrypt.compare(userInfo.password, matchPerson.password);
       return match;
     }
     return false;

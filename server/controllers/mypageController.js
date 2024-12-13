@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const { User, Posts } = require('../models');
-const { userDeleteService } = require('../services/mypageService');
+const { userDeleteService, updatePasswordService } = require('../services/mypageService');
 
 // get: 회원 정보
 const userInfo = async (req, res) => {
@@ -58,4 +58,25 @@ const userDelete = async (req, res) => {
   }
 };
 
-module.exports = { userInfo, userPosts, userDelete };
+// put: 비밀번호 재설정
+const updatePassword = async (req, res) => {
+
+
+  try {
+    const passwords = await req.body; // oldPassword, newPassword
+    const authUser = await req.payload;
+
+    if (authUser && passwords) {
+      await updatePasswordService(authUser, passwords)
+      return res.status(StatusCodes.OK).json({message: '비밀번호가 성공적으로 변경되었습니다.'});
+    }
+
+    return res.status(StatusCodes.NOT_FOUND).json({message: '비밀번호 재설정에 실패했습니다.'})
+
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('서버 에러');
+  }
+};
+
+module.exports = { userInfo, userPosts, userDelete, updatePassword };

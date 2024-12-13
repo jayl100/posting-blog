@@ -1,11 +1,12 @@
-const { verifyAccessToken } = require('../utils/auth');
 const { Posts } = require('../models');
 
 
 const postWriteService = async (userId, contents) => {
+  const { title, content } = contents;
+
   try {
     const newContent = await Posts.create({
-      title: contents.title, content: contents.content, userId: userId,
+      title: title, content: content, userId: userId,
     });
     return newContent;
   } catch (err) {
@@ -14,15 +15,17 @@ const postWriteService = async (userId, contents) => {
   }
 };
 
-const postModifyService = async (id, userId, postInfo) => {
+const postModifyService = async (id, userId, contents) => {
+  const { title, content } = contents;
+
   try {
     const matchPost = await Posts.findOne({ where: { id: id, userId: userId } });
 
     // 매치된 포스트만 update한다.
     if (matchPost) {
       const updatedPost = await matchPost.update({
-        title: postInfo.title,
-        content: postInfo.content,
+        title: title,
+        content: content,
       });
       return updatedPost;
     }

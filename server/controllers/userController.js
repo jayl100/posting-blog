@@ -1,4 +1,4 @@
-const { signupService, loginService, logoutService } = require('../services/userService');
+const { signupService, loginService, logoutService, resetPasswordService } = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
 
 
@@ -59,5 +59,22 @@ const logout = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  const userInfo = req.body; // email, newPassword
 
-module.exports = { signup, login, logout };
+  try {
+
+    if (userInfo) {
+      await resetPasswordService(userInfo);
+      return res.status(StatusCodes.OK).json({ message: '비밀번호 재설정이 완료되었습니다.' });
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail reset password' });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+  }
+
+
+};
+module.exports = { signup, login, logout, resetPassword };

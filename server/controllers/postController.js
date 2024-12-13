@@ -59,10 +59,10 @@ const postModify = async (req, res) => {
   try {
     const { id } = req.params;
     const authUser = await req.payload;
-    const postInfo = req.body;
+    const contents = req.body;
 
     if (id && authUser) {
-      const updatePost = await postModifyService(id, authUser.id, postInfo);
+      const updatePost = await postModifyService(id, authUser.id, contents);
       return res.status(StatusCodes.OK).json(updatePost);
     } else {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: '요청 정보가 올바르지 않습니다.' });

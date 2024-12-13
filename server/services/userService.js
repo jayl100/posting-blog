@@ -4,7 +4,9 @@ const { generateHashPassword, matchPassword, generateAccessToken, generateRefres
 // User = email, name, password(hashPassword)
 
 // 회원가입
-const signupService = async ({ email, name, password }) => {
+const signupService = async (userInfo) => {
+  const { email, name, password } = userInfo;
+
   try {
     const existedEmail = await User.findOne({ where: { email: email } });
     const existedName = await User.findOne({ where: { name: name } });
@@ -16,8 +18,8 @@ const signupService = async ({ email, name, password }) => {
     const hashedPassword = await generateHashPassword(password);
 
     const newUser = await User.create({
-      email,
-      name,
+      email: email,
+      name: name,
       password: hashedPassword,
     });
     return newUser;
@@ -66,4 +68,27 @@ const logoutService = async (userId) => {
   }
 };
 
-module.exports = { signupService, loginService, logoutService };
+// put: 비밀번호 찾기 (재설정)
+const resetPasswordService = async (userInfo) => {
+  const { email, password } = userInfo;
+
+  try {
+    const matchUser = await User.findOne({ where: { email: email } });
+
+    if (!matchUser) {
+      console.log('일치하는 회원이 없습니다.');
+      return;
+    }
+
+    const newHashedPassword = await generateHashPassword(password);
+    const reset = await matchUser.update({ where: { password: newHashedPassword } }); // 새 비번 업데이트
+
+    return reset;
+
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+module.exports = { signupService, loginService, logoutService, resetPasswordService };
