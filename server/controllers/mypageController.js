@@ -31,7 +31,7 @@ const userPosts = async (req, res) => {
       return res.status(StatusCodes.OK).json(myPosts);
     }
 
-    return res.status(StatusCodes.NOT_FOUND).json({message: '작성한 게시글이 없습니다.'});
+    return res.status(StatusCodes.OK).json([]);
 
   } catch (err) {
     console.error(err);
@@ -60,18 +60,16 @@ const userDelete = async (req, res) => {
 
 // put: 비밀번호 재설정
 const updatePassword = async (req, res) => {
-
-
   try {
     const passwords = await req.body; // oldPassword, newPassword
     const authUser = await req.payload;
 
     if (authUser && passwords) {
       await updatePasswordService(authUser, passwords)
-      return res.status(StatusCodes.OK).json({message: '비밀번호가 성공적으로 변경되었습니다.'});
+      return res.status(StatusCodes.CREATED).json({message: '비밀번호가 성공적으로 변경되었습니다.'});
     }
 
-    return res.status(StatusCodes.NOT_FOUND).json({message: '비밀번호 재설정에 실패했습니다.'})
+    return res.status(StatusCodes.BAD_REQUEST).json({message: '비밀번호 재설정에 실패했습니다.'})
 
   } catch (err) {
     console.error(err);

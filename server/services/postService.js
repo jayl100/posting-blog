@@ -9,6 +9,7 @@ const postWriteService = async (userId, contents) => {
       title: title, content: content, userId: userId,
     });
     return newContent;
+
   } catch (err) {
     console.error(err);
     throw err;
@@ -29,6 +30,7 @@ const postModifyService = async (id, userId, contents) => {
       });
       return updatedPost;
     }
+
     throw new Error('Service : 포스트가 정상적으로 업데이트 되지 않았습니다.');
 
   } catch (err) {
@@ -42,6 +44,7 @@ const postDeleteService = async (id, userId) => {
     if (userId) {
       return await Posts.destroy({ where: { id: id, userId: userId } });
     }
+
     throw new Error('Service : 포스트가 정상적으로 삭제되지 않았습니다.');
 
   } catch (err) {

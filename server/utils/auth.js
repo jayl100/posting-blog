@@ -61,6 +61,7 @@ const generateRefreshToken = (id) => {
   }
 };
 
+// 토큰 인증
 const verifyAccessToken = async (token, secret) => {
   try {
     const payload = jwt.verify(token, secret);
@@ -71,4 +72,14 @@ const verifyAccessToken = async (token, secret) => {
   }
 };
 
-module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken, verifyAccessToken };
+// 리프레시 토큰 인증
+const verifyRefreshToken = async (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_REFRESH_KEY);
+  } catch (err) {
+    console.error(err);
+    throw new Error('Unauthorized');
+  }
+};
+
+module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken };

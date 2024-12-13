@@ -46,13 +46,12 @@ const loginService = async function (userInfo) {
       });
 
       return { accessToken: accessToken, refreshToken: refreshToken };
-
-    } else {
-      throw new Error('Service : 이메일과 비밀번호를 다시 확인해주세요.');
     }
 
+    throw new Error('Service : 이메일과 비밀번호를 다시 확인해주세요.');
+
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     throw err;
   }
 };
@@ -76,7 +75,7 @@ const resetPasswordService = async (userInfo) => {
     const matchUser = await User.findOne({ where: { email: email } });
 
     if (!matchUser) {
-      console.log('일치하는 회원이 없습니다.');
+      throw new Error('Service : 일치하는 회원이 없습니다.');
       return;
     }
 
@@ -90,5 +89,6 @@ const resetPasswordService = async (userInfo) => {
     throw err;
   }
 };
+
 
 module.exports = { signupService, loginService, logoutService, resetPasswordService };
