@@ -59,7 +59,7 @@ const loginService = async function (userInfo) {
 // 로그아웃
 const logoutService = async (userId) => {
   try {
-    return await Token.destroy({ where: { userId: userId } });
+    return await Token.destroy({ where: { userId: userId.id } });
 
   } catch (err) {
     console.error(err);
@@ -80,7 +80,7 @@ const resetPasswordService = async (userInfo) => {
     }
 
     const newHashedPassword = await generateHashPassword(password);
-    const reset = await matchUser.update({ where: { password: newHashedPassword } }); // 새 비번 업데이트
+    const reset = await matchUser.update({ password: newHashedPassword }); // 새 비번 업데이트
 
     return reset;
 

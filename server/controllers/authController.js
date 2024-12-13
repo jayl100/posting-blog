@@ -2,7 +2,7 @@ const { Token } = require('../models');
 const { StatusCodes } = require('http-status-codes');
 const { generateAccessToken } = require('../utils/auth');
 
-const refreshToken = async (req, res) => {
+const refreshToken = async (req, res, next) => {
   const refreshTokenCookie = req.headers.cookie;
 
   if (!refreshTokenCookie) {
@@ -26,13 +26,16 @@ const refreshToken = async (req, res) => {
 
     if (token) {
       console.log('token: ', token);
-      res.header('Authorization', `Bearer ${ token.accessToken }`);
-      return res.status(StatusCodes.OK).json({ message: '새로운 토큰 발급 성공' });
+      res.header('Authorization', `Bearer ${ token }`);
+      return res.status(StatusCodes.OK).json({
+        message: '새로운 토큰 발급 성공',
+        accessToken: token
+      });
     }
 
   } catch (err) {
-    console.error(err);
-    throw err;
+    next(err);
+
   }
 };
 

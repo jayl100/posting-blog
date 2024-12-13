@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const cors = require('cors')
 const loginRouter = require('./routes/userRoute');
@@ -15,13 +16,18 @@ app.use(cors());
 app.listen(process.env.PORT)
 console.log(`Server running on http://localhost: ${ process.env.PORT }`);
 
-db.sequelize.authenticate()
-	.then(() => db.sequelize.sync())
-	.then(() => {
-		console.log('DB connection successful');
-	})
-	.catch((err) => console.error(err));
-
 app.use('/posts', postRouter);
 app.use('/users', loginRouter);
-app.use('/users', userRouter);
+app.use('/mypage', userRouter);
+
+app.use(errorHandler);
+
+(async() => {
+	try {
+		await db.sequelize.authenticate();
+		// await db.sequelize.sync();
+		console.log('DB connection successful');
+	} catch (err) {
+		console.error(err);
+	}
+})();

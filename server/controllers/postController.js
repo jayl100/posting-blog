@@ -4,7 +4,7 @@ const { postWriteService, postDeleteService, postModifyService } = require('../s
 
 
 // 게시글 리스트
-const postList = async (req, res) => {
+const postList = async (req, res, next) => {
   try {
     const listUp = await Posts.findAll();
 
@@ -15,13 +15,12 @@ const postList = async (req, res) => {
     return res.status(StatusCodes.OK).json([]); // 게시글이 없습니다. 필요
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
 // 게시글 디테일
-const postDetail = async (req, res) => {
+const postDetail = async (req, res, next) => {
   try {
     const { id } = req.params;
     const post = await Posts.findOne({ where: { id: id } });
@@ -33,13 +32,12 @@ const postDetail = async (req, res) => {
     return res.status(StatusCodes.NOT_FOUND).json({ message: '해당하는 게시글이 존재하지 않습니다.' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
 // 게시글 작성하기
-const postWrite = async (req, res) => {
+const postWrite = async (req, res, next) => {
   try {
     const authUser = await req.payload;
     const contents = req.body;
@@ -52,13 +50,12 @@ const postWrite = async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: '게시글 생성에 오류가 발생했습니다.' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
 // 게시글 수정
-const postModify = async (req, res) => {
+const postModify = async (req, res, next) => {
   try {
     const { id } = req.params;
     const authUser = await req.payload;
@@ -66,19 +63,18 @@ const postModify = async (req, res) => {
 
     if (id && authUser) {
       const updatePost = await postModifyService(id, authUser.id, contents);
-      return res.status(StatusCodes.CREATED).json(updatePost);
+      return res.status(StatusCodes.OK).json(updatePost);
     }
 
     return res.status(StatusCodes.BAD_REQUEST).json({ message: '요청 정보가 올바르지 않습니다.' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
 // 게시글 삭제하기
-const postDelete = async (req, res) => {
+const postDelete = async (req, res, next) => {
   try {
     const { id } = req.params;
     const authUser = await req.payload;
@@ -91,8 +87,7 @@ const postDelete = async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: '게시글 삭제에 오류가 발생했습니다.' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 

@@ -34,7 +34,7 @@ const updatePasswordService = async (authUser, password) => {
 
     const newHashedPassword = await generateHashPassword(newPassword); // 새 비번 암호화
 
-    const updatePasswordUser = await matchUser.update({ where: { password: newHashedPassword } }); // 새 비번 업데이트
+    const updatePasswordUser = await matchUser.update({ password: newHashedPassword }); // 새 비번 업데이트
     return updatePasswordUser;
 
   } catch (err) {

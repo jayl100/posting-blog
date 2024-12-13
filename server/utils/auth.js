@@ -37,15 +37,13 @@ const matchPassword = async (userInfo) => {
 
 // 토큰 생성
 const generateAccessToken = (id) => {
-  try {
-    const data = { id: id };
-    const token = jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1d', issuer: process.env.JWT_ISSUER });
-
-    return token;
-
-  } catch (err) {
-    throw new Error('accessToken', err);
-  }
+  const data = { id: id };
+  const token = jwt.sign(
+    data,
+    process.env.JWT_KEY,
+    { expiresIn: '1d', issuer: process.env.JWT_ISSUER }
+  );
+  return token;
 };
 
 // 리프레시 토큰 생성
@@ -82,4 +80,11 @@ const verifyRefreshToken = async (token) => {
   }
 };
 
-module.exports = { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken };
+module.exports = {
+  generateHashPassword,
+  matchPassword,
+  generateAccessToken,
+  generateRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken
+};

@@ -15,7 +15,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(StatusCodes.UNAUTHORIZED).json({ message: '유효한 토큰이 아닙니다.' });
     }
 
-    const payload = verifyAccessToken(token, process.env.JWT_KEY);
+    const payload = await verifyAccessToken(token, process.env.JWT_KEY);
     req.payload = payload; // 인증된 사용자 정보를 req 객체에 추가
 
     next();

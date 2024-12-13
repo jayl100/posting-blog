@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 
 
 // 회원가입
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   try {
     const userInfo = req.body;
 
@@ -14,49 +14,49 @@ const signup = async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: 중복된 이메일과 이름입니다.' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const userInfo = req.body; // email, password
     const token = await loginService(userInfo);
 
-    if (token) {
-      console.log('token : ', token);
-      res.header('Authorization', `Bearer ${ token.accessToken }`);
-      res.cookie('refreshToken', token.refreshToken, {
-        httpOnly: true,
-      });
-      return res.status(StatusCodes.OK).json({ message: '로그인' });
+    if (!token) {
+      throw new Error('이메일이나 비밀번호가 일치하지 않습니다.');
     }
 
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail login' });
+    console.log('token : ', token);
+    res.header('Authorization', `Bearer ${ token.accessToken }`);
+    res.cookie('refreshToken', token.refreshToken, {
+      httpOnly: true,
+    });
+
+    return res.status(StatusCodes.OK).json({ message: '로그인 성공' });
+
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
   try {
     const authUser = await req.payload;
+
     if (authUser) {
-      await logoutService(authUser.id);
+      await logoutService(authUser);
       return res.status(StatusCodes.OK).json({ message: '로그아웃 성공' });
     }
     return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail logout' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res, next) => {
   try {
     const userInfo = req.body; // email, newPassword
 
@@ -68,8 +68,7 @@ const resetPassword = async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail reset password' });
 
   } catch (err) {
-    console.error(err);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 에러' });
+    next(err);
   }
 };
 
