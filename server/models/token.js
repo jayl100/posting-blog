@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Token.belongsTo(models.User, {
         foreignKey: 'userId',
         targetKey: 'id',
+        onDelete: "cascade",
       })
     }
   }

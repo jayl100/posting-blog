@@ -24,4 +24,4 @@ db.sequelize.authenticate()
 
 app.use('/posts', postRouter);
 app.use('/users', loginRouter);
-app.use('/mypage', userRouter);
+app.use('/users', userRouter);

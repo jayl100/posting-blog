@@ -13,11 +13,13 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			User.hasMany(models.Posts, {
 				foreignKey: 'userId',
-				sourceKey: 'id'
+				sourceKey: 'id',
+				onDelete: "cascade",
 			})
 			User.hasOne(models.Token, {
 				foreignKey: 'userId',
-				sourceKey: 'id'
+				sourceKey: 'id',
+				onDelete: "cascade",
 			})
 		}
 	}
