@@ -33,13 +33,13 @@ const postModifyService = async (id, userId, contents) => {
   try {
     const matchPost = await Posts.findOne({ where: { id: id, userId: userId } });
 
-    if (!matchPost) {
-      throw new appError('존재하지 않은 게시글 입니다.', StatusCodes.NOT_FOUND);
-    }
-
     // 매치된 포스트 false
     if (matchPost.userId !== userId) {
       throw new appError('게시글의 수정 권한이 없습니다.', StatusCodes.FORBIDDEN);
+    }
+
+    if (!matchPost) {
+      throw new appError('존재하지 않은 게시글 입니다.', StatusCodes.NOT_FOUND);
     }
 
     const updatedPost = await matchPost.update({
