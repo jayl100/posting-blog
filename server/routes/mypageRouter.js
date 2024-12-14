@@ -7,15 +7,15 @@ const { authMiddleware } = require('../middlewares/authMiddleware');
 router.use(authMiddleware);
 
 // 개인정보
-router.get('/mypage', userInfo);
+router.get('/', userInfo);
 
 // 작성 게시글
-router.get('/mypage/posts', userPosts);
+router.get('/posts', userPosts);
 
 // 마이페이지 - 비밀번호 수정
-router.put('/mypage/password', updatePassword);
+router.put('/password', updatePassword);
 
 // 마이페이지 - 탈퇴
-router.delete('/mypage', userDelete);
+router.delete('/', userDelete);
 
 module.exports = router;
