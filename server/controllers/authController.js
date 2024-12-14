@@ -11,7 +11,7 @@ const refreshToken = async (req, res, next) => {
 
   try {
     const refreshToken = refreshTokenCookie.split('=')[1];
-    // const decoded = await verifyRefreshToken(refreshToken); // { id: 15, iat: 1734095055, exp: 1734699855, iss: 'jay' }
+    const decoded = await verifyRefreshToken(refreshToken); // { id: 15, iat: 1734095055, exp: 1734699855, iss: 'jay' }
 
     // 데이터베이스에서 리프레시 토큰 찾기
     const storedToken = await Token.findOne({ where: { token: refreshToken } });

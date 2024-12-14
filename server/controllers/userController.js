@@ -1,17 +1,22 @@
 const { signupService, loginService, logoutService, resetPasswordService } = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
+const appError = require('../utils/appError');
 
 
 // 회원가입
 const signup = async (req, res, next) => {
   try {
-    const userInfo = req.body;
+    const userInfo = req.body; // email, name, password
 
-    if (await signupService(userInfo)) {
-      return res.status(StatusCodes.CREATED).json({ message: '가입완료' });
+    if (!userInfo.email || !userInfo.name || !userInfo.password) {
+      throw new appError('입력항목을 모두 입력해 주세요.', StatusCodes.BAD_REQUEST);
     }
 
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: 중복된 이메일과 이름입니다.' });
+    if (await signupService(userInfo)) {
+      return res.status(StatusCodes.CREATED).json({ message: '가입이 완료되었습니다.' });
+    }
+
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '중복된 이메일과 이름입니다.' });
 
   } catch (err) {
     next(err);
@@ -21,11 +26,12 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const userInfo = req.body; // email, password
-    const token = await loginService(userInfo);
 
-    if (!token) {
-      throw new Error('이메일이나 비밀번호가 일치하지 않습니다.');
+    if (!userInfo.email || !userInfo.password) {
+      throw new appError('이메일과 비밀번호를 입력해 주세요', StatusCodes.BAD_REQUEST);
     }
+
+    const token = await loginService(userInfo);
 
     console.log('token : ', token);
     res.header('Authorization', `Bearer ${ token.accessToken }`);
@@ -34,7 +40,6 @@ const login = async (req, res, next) => {
     });
 
     return res.status(StatusCodes.OK).json({ message: '로그인 성공' });
-
 
   } catch (err) {
     next(err);
@@ -45,11 +50,8 @@ const logout = async (req, res, next) => {
   try {
     const authUser = await req.payload;
 
-    if (authUser) {
-      await logoutService(authUser);
-      return res.status(StatusCodes.OK).json({ message: '로그아웃 성공' });
-    }
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail logout' });
+    await logoutService(authUser);
+    return res.status(StatusCodes.OK).json({ message: '로그아웃 성공' });
 
   } catch (err) {
     next(err);

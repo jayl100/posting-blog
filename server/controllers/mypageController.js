@@ -1,19 +1,20 @@
 const { StatusCodes } = require('http-status-codes');
 const { User, Posts } = require('../models');
 const { userDeleteService, updatePasswordService } = require('../services/mypageService');
+const appError = require('../utils/appError');
 
 // get: 회원 정보
 const userInfo = async (req, res, next) => {
 
   try {
     const authUser = await req.payload;
-    const userPage = await User.findOne({where: {id: authUser.id}});
+    const userPage = await User.findOne({ where: { id: authUser.id } });
 
-    if (authUser) {
-      return res.status(StatusCodes.OK).json(userPage);
+    if (!authUser) {
+      throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
     }
 
-    return res.status(StatusCodes.NOT_FOUND).json({message: '존재하지 않은 회원입니다.'});
+    return res.status(StatusCodes.OK).json(userPage);
 
   } catch (err) {
     next(err);
@@ -24,13 +25,17 @@ const userInfo = async (req, res, next) => {
 const userPosts = async (req, res, next) => {
   try {
     const authUser = await req.payload;
-    const myPosts = await Posts.findAll({where: {userId: authUser.id}});
+    const myPosts = await Posts.findAll({ where: { userId: authUser.id } });
 
-    if (authUser) {
-      return res.status(StatusCodes.OK).json(myPosts);
+    if (!authUser) {
+      throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
     }
 
-    return res.status(StatusCodes.OK).json([]);
+    if (!myPosts) {
+      return res.status(StatusCodes.OK).json([]);
+    }
+
+    return res.status(StatusCodes.OK).json(myPosts);
 
   } catch (err) {
     next(err);
@@ -41,14 +46,14 @@ const userPosts = async (req, res, next) => {
 const userDelete = async (req, res, next) => {
   try {
     const authUser = await req.payload;
-    const userInfo = await User.findOne({where: {id: authUser.id}});
+    const userInfo = await User.findOne({ where: { id: authUser.id } });
 
-    if (authUser) {
-      await userDeleteService(userInfo.id)
-      return res.status(StatusCodes.OK).json({message: '회원탈퇴가 완료되었습니다.'});
+    if (!authUser || !userInfo) {
+      throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
     }
 
-    return res.status(StatusCodes.NOT_FOUND).json({message: '회원정보를 다시 확인해주세요.'})
+    await userDeleteService(userInfo.id);
+    return res.status(StatusCodes.OK).json({ message: '회원탈퇴가 완료되었습니다.' });
 
   } catch (err) {
     next(err);
@@ -61,12 +66,12 @@ const updatePassword = async (req, res, next) => {
     const passwords = await req.body; // oldPassword, newPassword
     const authUser = await req.payload;
 
-    if (authUser && passwords) {
-      await updatePasswordService(authUser, passwords)
-      return res.status(StatusCodes.OK).json({message: '비밀번호가 성공적으로 변경되었습니다.'});
+    if (!authUser || !passwords) {
+      throw new appError('비밀번호 재설정에 실패했습니다.', StatusCodes.BAD_REQUEST);
     }
 
-    return res.status(StatusCodes.BAD_REQUEST).json({message: '비밀번호 재설정에 실패했습니다.'})
+    await updatePasswordService(authUser, passwords);
+    return res.status(StatusCodes.OK).json({ message: '비밀번호가 성공적으로 변경되었습니다.' });
 
   } catch (err) {
     next(err);

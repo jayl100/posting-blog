@@ -1,5 +1,7 @@
 const { User, Token } = require('../models');
 const { generateHashPassword, matchPassword, generateAccessToken, generateRefreshToken } = require('../utils/auth');
+const appError = require('../utils/appError');
+const { StatusCodes } = require('http-status-codes');
 
 // User = email, name, password(hashPassword)
 
@@ -12,17 +14,25 @@ const signupService = async (userInfo) => {
     const existedName = await User.findOne({ where: { name: name } });
 
     if (existedEmail || existedName) {
-      throw new Error('Service : 중복된 이메일과 이름입니다.');
+      throw new appError('이메일이나 이름이 이미 존재합니다.', StatusCodes.CONFLICT);
+    }
+
+    if (password.length < 6) {
+      throw new appError('비밀번호는 최소 6자 이상이어야 합니다.', StatusCodes.BAD_REQUEST);
     }
 
     const hashedPassword = await generateHashPassword(password);
 
+    if (userInfo) {
     const newUser = await User.create({
       email: email,
       name: name,
       password: hashedPassword,
     });
     return newUser;
+    }
+
+    throw new appError('회원가입에 실패했습니다. 다시 한번 시도해 주세요.', StatusCodes.INTERNAL_SERVER_ERROR);
 
   } catch (err) {
     console.error(err);
@@ -34,6 +44,10 @@ const signupService = async (userInfo) => {
 const loginService = async function (userInfo) {
   try {
     const existedEmail = await User.findOne({ where: { email: userInfo.email } });
+
+    if (!existedEmail) {
+      throw new appError('존재하지 않은 이메일 입니다.')
+    }
 
     if (existedEmail && await matchPassword(userInfo)) {
       const accessToken = await generateAccessToken(existedEmail.id);
@@ -48,7 +62,7 @@ const loginService = async function (userInfo) {
       return { accessToken: accessToken, refreshToken: refreshToken };
     }
 
-    throw new Error('Service : 이메일과 비밀번호를 다시 확인해주세요.');
+    throw new appError('다시 시도해 주세요.', StatusCodes.INTERNAL_SERVER_ERROR);
 
   } catch (err) {
     console.error(err);
@@ -74,13 +88,20 @@ const resetPasswordService = async (userInfo) => {
   try {
     const matchUser = await User.findOne({ where: { email: email } });
 
+    if (!password || password.length < 6) {
+      throw new appError('6자 이상의 비밀번호를 입력해 주세요.', StatusCodes.BAD_REQUEST);
+    }
+
     if (!matchUser) {
-      throw new Error('Service : 일치하는 회원이 없습니다.');
-      return;
+      throw new appError('일치하는 이메일이 없습니다.', StatusCodes.BAD_REQUEST);
     }
 
     const newHashedPassword = await generateHashPassword(password);
+
     const reset = await matchUser.update({ password: newHashedPassword }); // 새 비번 업데이트
+    if (!reset) {
+      throw new appError('비밀번호 변경에 실패했습니다.', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
 
     return reset;
 

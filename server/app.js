@@ -5,9 +5,9 @@ dotenv.config();
 const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const cors = require('cors')
-const loginRouter = require('./routes/userRoute');
+const loginRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
-const userRouter = require('./routes/mypageRouter');
+const mypageRouter = require('./routes/mypageRouter');
 const db = require('./models');
 
 app.use(express.json());
@@ -18,7 +18,7 @@ console.log(`Server running on http://localhost: ${ process.env.PORT }`);
 
 app.use('/posts', postRouter);
 app.use('/users', loginRouter);
-app.use('/mypage', userRouter);
+app.use('/mypage', mypageRouter);
 
 app.use(errorHandler);
 

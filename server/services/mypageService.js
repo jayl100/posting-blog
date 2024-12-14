@@ -1,6 +1,8 @@
 const { User } = require('../models');
 const { generateHashPassword } = require('../utils/auth');
 const bcrypt = require('bcrypt');
+const appError = require('../utils/appError');
+const { StatusCodes } = require('http-status-codes');
 
 // delete: 탈퇴하기
 const userDeleteService = async (userId) => {
@@ -8,9 +10,9 @@ const userDeleteService = async (userId) => {
     const user = await User.findByPk(userId);
 
     if (!user) {
-      console.log('사용자를 찾을 수 없습니다.');
-      return;
+      throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
     }
+
     return await User.destroy({where: {id: userId}});
 
   } catch (err) {
@@ -28,8 +30,7 @@ const updatePasswordService = async (authUser, password) => {
     const matchPassword = await bcrypt.compare(oldPassword, matchUser.password); // auth유저의 기존 비번 확인
 
     if (!matchPassword) {
-      console.log('현재 비밀번호를 다시 확인해주세요.');
-      return;
+      throw new appError('기본 비밀번호를 확인해 주세요.', StatusCodes.UNAUTHORIZED);
     }
 
     const newHashedPassword = await generateHashPassword(newPassword); // 새 비번 암호화

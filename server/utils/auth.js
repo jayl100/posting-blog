@@ -1,7 +1,9 @@
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { StatusCodes } = require('http-status-codes');
 const saltRounds = 10;
+const appError = require('../utils/appError');
 
 // bcrypt = 계정 암호
 // crypto = 토큰
@@ -24,11 +26,12 @@ const matchPassword = async (userInfo) => {
   try {
     const matchPerson = await User.findOne({ where: { email: userInfo.email } });
 
-    if (matchPerson) {
-      const match = await bcrypt.compare(userInfo.password, matchPerson.password);
-      return match;
+    if (!matchPerson) {
+      throw new appError('비밀번호를 다시 확인해 주세요', StatusCodes.UNAUTHORIZED)
     }
-    return false;
+
+    const match = await bcrypt.compare(userInfo.password, matchPerson.password);
+    return match;
 
   } catch (err) {
     throw new Error('matchPassword', err);
