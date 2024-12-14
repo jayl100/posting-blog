@@ -14,7 +14,7 @@ const signupService = async (userInfo) => {
     const existedName = await User.findOne({ where: { name: name } });
 
     if (existedEmail || existedName) {
-      throw new appError('이메일이나 이름이 이미 존재합니다.', StatusCodes.CONFLICT);
+      throw new appError('이미 존재하는 이메일과 이름 입니다.', StatusCodes.CONFLICT);
     }
 
     if (password.length < 6) {
@@ -46,7 +46,11 @@ const loginService = async function (userInfo) {
     const existedEmail = await User.findOne({ where: { email: userInfo.email } });
 
     if (!existedEmail) {
-      throw new appError('존재하지 않은 이메일 입니다.')
+      throw new appError('존재하지 않은 이메일 입니다.', StatusCodes.NOT_FOUND);
+    }
+
+    if (!await matchPassword(userInfo)) {
+      throw new appError('비밀번호를 다시 확인해 주세요.', StatusCodes.UNAUTHORIZED)
     }
 
     if (existedEmail && await matchPassword(userInfo)) {
@@ -71,9 +75,9 @@ const loginService = async function (userInfo) {
 };
 
 // 로그아웃
-const logoutService = async (userId) => {
+const logoutService = async (authUser) => {
   try {
-    return await Token.destroy({ where: { userId: userId.id } });
+    return await Token.destroy({ where: { userId: authUser.id } });
 
   } catch (err) {
     console.error(err);
@@ -88,17 +92,17 @@ const resetPasswordService = async (userInfo) => {
   try {
     const matchUser = await User.findOne({ where: { email: email } });
 
-    if (!password || password.length < 6) {
-      throw new appError('6자 이상의 비밀번호를 입력해 주세요.', StatusCodes.BAD_REQUEST);
-    }
-
     if (!matchUser) {
       throw new appError('일치하는 이메일이 없습니다.', StatusCodes.BAD_REQUEST);
     }
 
-    const newHashedPassword = await generateHashPassword(password);
+    if (password.length < 6) {
+      throw new appError('6자 이상의 비밀번호를 입력해 주세요.', StatusCodes.BAD_REQUEST);
+    }
 
+    const newHashedPassword = await generateHashPassword(password);
     const reset = await matchUser.update({ password: newHashedPassword }); // 새 비번 업데이트
+
     if (!reset) {
       throw new appError('비밀번호 변경에 실패했습니다.', StatusCodes.INTERNAL_SERVER_ERROR);
     }

@@ -45,14 +45,14 @@ const userPosts = async (req, res, next) => {
 // delete: 탈퇴
 const userDelete = async (req, res, next) => {
   try {
-    const authUser = await req.payload;
-    const userInfo = await User.findOne({ where: { id: authUser.id } });
+    const password = await req.body.password;
+    const authUser = await req.payload; // { id: 19, iat: 1734183358, exp: 1734269758, iss: 'jay' }
 
-    if (!authUser || !userInfo) {
-      throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
+    if (!password) {
+      throw new appError('비밀번호를 입력해 주세요.', StatusCodes.BAD_REQUEST);
     }
 
-    await userDeleteService(userInfo.id);
+    await userDeleteService(authUser, password);
     return res.status(StatusCodes.OK).json({ message: '회원탈퇴가 완료되었습니다.' });
 
   } catch (err) {
@@ -66,7 +66,7 @@ const updatePassword = async (req, res, next) => {
     const passwords = await req.body; // oldPassword, newPassword
     const authUser = await req.payload;
 
-    if (!authUser || !passwords) {
+    if (!passwords) {
       throw new appError('비밀번호 재설정에 실패했습니다.', StatusCodes.BAD_REQUEST);
     }
 

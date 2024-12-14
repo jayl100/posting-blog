@@ -16,7 +16,7 @@ const signup = async (req, res, next) => {
       return res.status(StatusCodes.CREATED).json({ message: '가입이 완료되었습니다.' });
     }
 
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: '중복된 이메일과 이름입니다.' });
+    throw new appError('중복된 이메일과 이름입니다.', StatusCodes.BAD_REQUEST);
 
   } catch (err) {
     next(err);
@@ -28,7 +28,7 @@ const login = async (req, res, next) => {
     const userInfo = req.body; // email, password
 
     if (!userInfo.email || !userInfo.password) {
-      throw new appError('이메일과 비밀번호를 입력해 주세요', StatusCodes.BAD_REQUEST);
+      throw new appError('이메일과 비밀번호를 입력해 주세요.', StatusCodes.BAD_REQUEST);
     }
 
     const token = await loginService(userInfo);
@@ -62,12 +62,12 @@ const resetPassword = async (req, res, next) => {
   try {
     const userInfo = req.body; // email, newPassword
 
-    if (userInfo) {
-      await resetPasswordService(userInfo);
-      return res.status(StatusCodes.CREATED).json({ message: '비밀번호 재설정이 완료되었습니다.' });
+    if (!userInfo.email || !userInfo.password) {
+      throw new appError('내용을 모두 입력해 주세요.', StatusCodes.BAD_REQUEST);
     }
 
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Controller: fail reset password' });
+    await resetPasswordService(userInfo);
+    return res.status(StatusCodes.CREATED).json({ message: '비밀번호 재설정이 완료되었습니다.' });
 
   } catch (err) {
     next(err);

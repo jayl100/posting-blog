@@ -30,6 +30,7 @@ const postDetail = async (req, res, next) => {
       throw new appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
 
     }
+
     return res.status(StatusCodes.OK).json(post);
 
   } catch (err) {

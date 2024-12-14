@@ -64,7 +64,7 @@ const postDeleteService = async (id, userId) => {
 
     // 매치된 포스트 false
     if (matchPost.userId !== userId) {
-      throw new appError('게시글의 수정 권한이 없습니다.', StatusCodes.FORBIDDEN);
+      throw new appError('게시글의 삭제 권한이 없습니다.', StatusCodes.FORBIDDEN);
     }
 
     return await Posts.destroy({ where: { id: id, userId: userId } });
