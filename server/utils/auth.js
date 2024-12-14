@@ -53,7 +53,10 @@ const generateAccessToken = (id) => {
 const generateRefreshToken = (id) => {
   try {
     const data = { id: id };
-    const token = jwt.sign(data, process.env.JWT_REFRESH_KEY, { expiresIn: '7d', issuer: process.env.JWT_ISSUER });
+    const token = jwt.sign(data, process.env.JWT_REFRESH_KEY, {
+      expiresIn: process.env.JWT_REFRESH_EXPIRES,
+      issuer: process.env.JWT_ISSUER
+    });
 
     return token;
 

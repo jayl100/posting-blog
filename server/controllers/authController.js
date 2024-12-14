@@ -1,12 +1,13 @@
 const { Token } = require('../models');
 const { StatusCodes } = require('http-status-codes');
-const { generateAccessToken } = require('../utils/auth');
+const { generateAccessToken, verifyRefreshToken } = require('../utils/auth');
+const appError = require('../utils/appError');
 
 const refreshToken = async (req, res, next) => {
   const refreshTokenCookie = req.headers.cookie;
 
   if (!refreshTokenCookie) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Refresh token is required' });
+    throw new appError('리프레시 토큰이 필요합니다.', StatusCodes.BAD_REQUEST);
   }
 
   try {
@@ -18,20 +19,18 @@ const refreshToken = async (req, res, next) => {
 
     // 리프레시 토큰 만료 여부 확인
     if (!storedToken) {
-      return res.status(StatusCodes.FORBIDDEN).json({ message: 'refresh token expired' });
+      throw new appError('refresh token expired or invalid', StatusCodes.FORBIDDEN);
     }
 
     // 새로운 액세스 토큰 생성
-    const token = await generateAccessToken(storedToken.userId);
+    const token = await generateAccessToken(decoded.userId);
 
-    if (token) {
-      console.log('token: ', token);
-      res.header('Authorization', `Bearer ${ token }`);
-      return res.status(StatusCodes.OK).json({
-        message: '새로운 토큰 발급 성공',
-        accessToken: token
-      });
-    }
+    console.log('token: ', token);
+    res.header('Authorization', `Bearer ${ token }`);
+    return res.status(StatusCodes.OK).json({
+      message: '새로운 토큰 발급 성공',
+      accessToken: token
+    });
 
   } catch (err) {
     next(err);
