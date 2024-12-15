@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import logo from '../../assets/BLOG_primary.svg';
-import theme from '../../theme/theme.ts';
 
 
 function Header() {
@@ -29,7 +28,7 @@ function Header() {
 
 
 const HeaderStyled = styled.div`
-    border-bottom: 1px solid ${ ({ theme }) => theme.colours.d9 };
+    border-bottom: 1px solid ${ ({ theme }) => theme.color.d9 };
 `;
 
 const Contents = styled.div`
@@ -48,11 +47,11 @@ const Contents = styled.div`
     }
 
     a:active {
-        color: ${ theme.colours.primary };
+        color: ${ ({ theme }) => theme.color.primary };
     }
 
     .nav {
-        font-size: 1.2rem;
+        font-size: ${({ theme }) => theme.fontSize.h3};
         font-weight: 600;
     }
 `;

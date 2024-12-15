@@ -25,7 +25,7 @@ function Footer() {
 }
 
 const FooterStyled = styled.div`
-    background-color: ${ ({ theme }) => theme.colours.secondary };
+    background-color: ${ ({ theme }) => theme.color.secondary };
 `;
 
 const Contents = styled.div`
@@ -50,7 +50,7 @@ const Contents = styled.div`
         display: flex;
         flex-direction: column-reverse;
         gap: 1.8rem;
-        font-size: 1.4rem;
+        font-size: ${({ theme }) => theme.fontSize.h3};
         font-weight: 500;
     }
 

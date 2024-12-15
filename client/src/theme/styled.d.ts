@@ -1,8 +1,10 @@
 import 'styled-components';
 
+export type ButtonStyle = 'filled' | 'outlined' | 'sFilled' | 'sOutlined';
+
 declare module 'styled-components' {
   export interface DefaultTheme {
-    colours: {
+    color: {
       primary: string;
       secondary: string;
       lightGrey: string;
@@ -10,10 +12,16 @@ declare module 'styled-components' {
       d9: string;
       f9: string;
     },
-    backgroundColour: {
+    backgroundColor: {
       primary: string;
-      lightGrey: string;
+      f9: string;
     },
+    fontSize: {
+      h1: string;
+      h2: string;
+      h3: string;
+      text: string;
+    }
     borderRadius: {
       default: string;
     },
@@ -24,6 +32,22 @@ declare module 'styled-components' {
       mobile: string;
       tablet: string;
       desktop: string;
+    },
+    buttons: {
+      [key in ButtonStyle]: {
+        width: string;
+        height: string;
+        fontSize: string;
+        fontWeight: number;
+        backgroundColor: string;
+        border: number | string;
+        color: string;
+        hover: {
+          backgroundColor: string;
+          color?: string;
+          border?: number | string;
+        };
+      }
     }
   }
 }

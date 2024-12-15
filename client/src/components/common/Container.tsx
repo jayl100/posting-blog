@@ -22,7 +22,7 @@ function Container({ children, width }: Props) {
 const ContainerStyled = styled.div<Props>`
     max-width: ${ (props) => props.width }px;
     margin: 0 auto;
-    height: 100px;
+    padding: 80px 0;
 `;
 
 export default Container;

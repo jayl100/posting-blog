@@ -10,7 +10,6 @@ function Mypage() {
 }
 
 const MypageStyled = styled.div`
-
 `;
 
 export default Mypage;
