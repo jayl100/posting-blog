@@ -39,7 +39,10 @@ const login = async (req, res, next) => {
       httpOnly: true,
     });
 
-    return res.status(StatusCodes.OK).json({ message: '로그인 성공' });
+    return res.status(StatusCodes.OK).json({
+      message: '로그인 성공',
+      token: token.accessToken
+    });
 
   } catch (err) {
     next(err);

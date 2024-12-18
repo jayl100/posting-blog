@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 			User.hasMany(models.Posts, {
 				foreignKey: 'userId',
 				sourceKey: 'id',
+				as: 'posts',
 				onDelete: 'CASCADE',
 				hooks: true,
 			})

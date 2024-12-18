@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { Posts } = require('../models');
+const { Posts, User } = require('../models');
 const { postWriteService, postDeleteService, postModifyService } = require('../services/postService');
 const appError = require('../utils/appError');
 
@@ -7,10 +7,33 @@ const appError = require('../utils/appError');
 // 게시글 리스트
 const postList = async (req, res, next) => {
   try {
-    const listUp = await Posts.findAll();
+    const posts = await Posts.findAll({
+      attributes: [ 'id', 'title', 'content', 'userId', 'createdAt', 'updatedAt' ],
+      include: [ {
+        model: User,
+        as: 'user',
+        attributes: [ 'name' ],
+      } ]
+    });
 
-    if (listUp.length > 0) {
-      return res.status(StatusCodes.OK).json(listUp);
+    const modifiedPosts = posts.map(post => {
+      const raw = post.get({ plain: true });
+
+      return {
+        id: raw.id,
+        title: raw.title,
+        name: raw.user.name,
+        userId: raw.userId,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
+      };
+    });
+
+    console.log(modifiedPosts);
+
+
+    if (modifiedPosts.length > 0) {
+      return res.status(StatusCodes.OK).json(modifiedPosts);
     }
 
     return res.status(StatusCodes.OK).json([]); // 게시글이 없습니다. 필요

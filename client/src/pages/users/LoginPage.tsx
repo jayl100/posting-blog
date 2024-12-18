@@ -1,26 +1,25 @@
 import styled from 'styled-components';
-import Input from '../../components/forms/form.tsx';
+import Input from '../../components/forms/Input.tsx';
 import Button from '../../components/buttons/Button.tsx';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Title from '../../components/Title.tsx';
-
-interface LoginProps {
-  email: string;
-  password: string;
-}
+import { ILogin } from '../../type/type.ts';
+import useAuth from '../../hooks/useAuth.ts';
 
 
 function Login() {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<LoginProps>();
-  const onSubmit = (data: LoginProps) => console.log(data);
+  const { register, handleSubmit } = useForm<ILogin>();
+  const { handleLogin } = useAuth();
 
-  console.log(watch('email')); // watch input value by passing the name of it
-
+  const onSubmit = (data: ILogin) => {
+    console.log(data);
+    handleLogin(data)
+  };
 
   return (
     <>
-      <Title marginBottom="60px">로그인</Title>
+      <Title bottom="60px">로그인</Title>
       <LoginStyled onSubmit={ handleSubmit(onSubmit) }>
         <div className="input">
           <Input label="이메일" placeholder="아이디를 입력해 주세요." type="email"
@@ -28,13 +27,13 @@ function Login() {
           />
           <div className="password">
             <Input label="비밀번호" placeholder="비밀번호를 입력해 주세요." type="password"
-                   { ...register('email', { required: '이메일을 입력해 주세요.' }) }
+                   { ...register('password', { required: '비밀번호를 입력해 주세요.' }) }
             />
             <Link to="/users/reset">비밀번호 재설정</Link>
           </div>
         </div>
         <div className="btn">
-          <Button button="outlined" type="submit"> 회원가입</Button>
+          <Button button="outlined" type="button"> 회원가입</Button>
           <Button button="filled" type="submit"> 로그인</Button>
         </div>
       </LoginStyled>
@@ -65,7 +64,6 @@ const LoginStyled = styled.form`
                 }
             }
         }
-
     }
 
     .btn {

@@ -46,11 +46,11 @@ const loginService = async function (userInfo) {
     const existedEmail = await User.findOne({ where: { email: userInfo.email } });
 
     if (!existedEmail) {
-      throw new appError('존재하지 않은 이메일 입니다.', StatusCodes.NOT_FOUND);
+      throw new appError('존재하지 않은 이메일 입니다.', StatusCodes.BAD_REQUEST);
     }
 
     if (!await matchPassword(userInfo)) {
-      throw new appError('비밀번호를 다시 확인해 주세요.', StatusCodes.UNAUTHORIZED)
+      throw new appError('비밀번호를 다시 확인해 주세요.', StatusCodes.BAD_REQUEST)
     }
 
     if (existedEmail && await matchPassword(userInfo)) {
