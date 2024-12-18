@@ -3,11 +3,12 @@ import { createBrowserRouter } from 'react-router-dom';
 import Home from '../pages/Home.tsx';
 import Container from '../components/common/Container.tsx';
 import PostDetail from '../pages/posts/PostDetail.tsx';
-import PostWrite from '../pages/posts/PostWrite.tsx';
+import PostingPage from '../pages/posts/PostingPage.tsx';
 import PasswordReset from '../pages/users/PasswordReset.tsx';
-import Login from '../pages/users/Login.tsx';
+import LoginPage from '../pages/users/LoginPage.tsx';
 import Signup from '../pages/users/Signup.tsx';
 import Mypage from '../pages/mypage/Mypage.tsx';
+import PostListPage from '../pages/posts/PostListPage.tsx';
 
 const routeList = [
   {
@@ -18,18 +19,23 @@ const routeList = [
   // posts
   {
     path: '/posts',
-    element: <PostDetail/>,
+    element: <PostListPage/>,
     width: 1200,
   },
   {
-    path: '/posts/write',
-    element: <PostWrite />,
-    width: 800,
+    path: '/posts/posting',
+    element: <PostingPage />,
+    width: 1000,
   },
   {
     path: '/posts/:id',
     element: <PostDetail/>,
-    width: 800,
+    width: 1000,
+  },
+  {
+    path: '/posts/detail',
+    element: <PostDetail/>,
+    width: 1000,
   },
   // users
   {
@@ -39,7 +45,7 @@ const routeList = [
   },
   {
     path: '/users/login',
-    element: <Login />,
+    element: <LoginPage />,
     width: 600,
   },
   {
@@ -49,7 +55,7 @@ const routeList = [
   },
   // mypage
   {
-    path: '/mypage',
+    path: '/users/mypage',
     element: <Mypage />,
     width: 1200,
   },

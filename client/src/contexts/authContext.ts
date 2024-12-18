@@ -1,5 +1,15 @@
 import { createContext } from 'react';
 
-const AuthContext = createContext(null);
+interface AuthContextType {
+  isAuth: boolean;
+  login: () => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType>({
+  isAuth: false,
+  login: () => {},
+  logout: () => {},
+});
 
 export default AuthContext;

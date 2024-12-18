@@ -2,22 +2,23 @@ import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
-  marginBottom?: string;
+  bottomsize?: string;
 
 }
 
-function Title({ children, marginBottom }: Props) {
+function Title({ children, bottomsize }: Props) {
   return (
-    <TitleStyled marginBottom={marginBottom}>
+    <TitleStyled bottomsize={bottomsize}>
       { children }
     </TitleStyled>
   );
 }
 
 const TitleStyled = styled.h1<Omit<Props, 'children'>>`
+    width: 100%;
     font-size: ${({ theme }) => theme.fontSize.h1};
     color: #000;
-    margin-bottom: ${({ marginBottom }) => marginBottom ? marginBottom : 0};
+    margin-bottom: ${({ bottomsize }) => bottomsize ? bottomsize : 0};
     text-align: center;
 `;
 

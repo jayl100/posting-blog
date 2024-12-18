@@ -1,59 +1,88 @@
 import styled from 'styled-components';
 import logo from '../../assets/BLOG_primary.svg';
+import { useContext } from 'react';
+import AuthContext from '../../contexts/authContext.ts';
+import useAuth from '../../hooks/useAuth.ts';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
+  const { isAuth } = useContext(AuthContext);
+  const { handleLogout } = useAuth();
+
+
   return (
-    <HeaderStyled>
-      <Contents>
-        <div>
-          <a href="/">
-            <img src={ logo } alt="logo" />
-          </a>
-        </div>
-        <ul className="nav">
-          <li>
-            <a href="/posts">게시판</a>
-          </li>
-          <li><a href="/posts/write">글쓰기</a></li>
-        </ul>
-        <ul>
-          <li><a href="/users/login">로그인</a></li>
-          <li><a href="/users/signup">회원가입</a></li>
-        </ul>
-      </Contents>
-    </HeaderStyled>
+    <>
+      <WidthStyled>
+        <Contents>
+          <div>
+            <a href="/">
+              <img src={ logo } alt="logo" />
+            </a>
+          </div>
+          <ul className="nav">
+            <li><Link to={`/posts`}>게시판</Link></li>
+            { isAuth ? <li><Link to="/posts/posting">글쓰기</Link></li> : "" }
+          </ul>
+          { isAuth ?
+            (<ul>
+              <li><Link to='/' onClick={ handleLogout }>로그아웃</Link></li>
+              <li><Link to="/users/mypage">마이페이지</Link></li>
+            </ul>)
+            :
+            (<ul>
+              <li><Link to="/users/Login">로그인</Link></li>
+              <li><Link to="/users/signup">회원가입</Link></li>
+            </ul>)
+          }
+        </Contents>
+      </WidthStyled>
+      <HeaderStyled />
+    </>
   );
 }
 
+const WidthStyled = styled.div`
+    max-width: ${ ({ theme }) => theme.width.default };
+    width: 100%;
 
-const HeaderStyled = styled.div`
-    border-bottom: 1px solid ${ ({ theme }) => theme.color.d9 };
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 80px;
 `;
 
+
 const Contents = styled.div`
-    width: ${ ({ theme }) => theme.width.default };
-    height: 80px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+
+
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: nowrap;
+
     align-items: center;
-    margin: 0 auto;
+    justify-content: space-between;
+    flex-direction: row;
+
 
     ul {
         display: flex;
-        flex-direction: row;
         gap: 2rem;
     }
 
-    a:active {
+    a:hover {
         color: ${ ({ theme }) => theme.color.primary };
     }
 
     .nav {
-        font-size: ${({ theme }) => theme.fontSize.h3};
+        font-size: ${ ({ theme }) => theme.fontSize.h3 };
         font-weight: 600;
     }
+`;
+
+const HeaderStyled = styled.div`
+    border-bottom: 1px solid ${ ({ theme }) => theme.color.d9 };
 `;
 
 export default Header;

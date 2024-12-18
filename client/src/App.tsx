@@ -1,17 +1,20 @@
-import GlobalStyle from './theme/GlobalStyle.ts';
+import GlobalStyle from './theme/globalStyle.ts';
 import { ThemeProvider } from 'styled-components';
 import { RouterProvider } from 'react-router-dom';
 import theme from './theme/theme.ts';
-import router from './routes/route.tsx';
+import router from './routes/Route.tsx';
+import AuthProvider from './contexts/AuthProvider.tsx';
 
 function App() {
 
   return (
     <>
-      <ThemeProvider theme={ theme }>
-        <RouterProvider router={ router } />
-        <GlobalStyle />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={ theme }>
+          <RouterProvider router={ router } />
+          <GlobalStyle />
+        </ThemeProvider>
+      </AuthProvider>
     </>
   );
 }

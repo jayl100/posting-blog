@@ -1,33 +1,33 @@
 import styled from 'styled-components';
-import { ButtonStyle } from '../../theme/styled';
+import { buttontypes } from '../../theme/styled';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  button: ButtonStyle;
+  buttontype: buttontypes;
 }
 
-function Button({ children, button, ...rest }: Props) {
+function Button({ children, buttontype, ...rest }: Props) {
   return (
-    <ButtonStyled button={ button } { ...rest } >
+    <ButtonStyled buttontype={ buttontype } { ...rest } >
       { children }
     </ButtonStyled>
   );
 }
 
 const ButtonStyled = styled.button<Omit<Props, 'children'>>`
-    width: ${ ({ theme, button }) => theme.buttons[button].width };
-    height: ${ ({ theme, button }) => theme.buttons[button].height };
-    font-size: ${ ({ theme, button }) => theme.buttons[button].fontSize };
-    font-weight: ${ ({ theme, button }) => theme.buttons[button].fontWeight };
-    background-color: ${ ({ theme, button }) => theme.buttons[button].backgroundColor };
-    border: ${ ({ theme, button }) => theme.buttons[button].border };
-    color: ${ ({ theme, button }) => theme.buttons[button].color };
+    width: ${ ({ theme, buttontype }) => theme.buttons[buttontype].width };
+    height: ${ ({ theme, buttontype }) => theme.buttons[buttontype].height };
+    font-size: ${ ({ theme, buttontype }) => theme.buttons[buttontype].fontSize };
+    font-weight: ${ ({ theme, buttontype }) => theme.buttons[buttontype].fontWeight };
+    background-color: ${ ({ theme, buttontype }) => theme.buttons[buttontype].backgroundColor };
+    border: ${ ({ theme, buttontype }) => theme.buttons[buttontype].border };
+    color: ${ ({ theme, buttontype }) => theme.buttons[buttontype].color };
     border-radius: 999px;
     
     &:hover {
-        background-color: ${({ theme, button }) => theme.buttons[button].hover.backgroundColor};
-        color: ${({ theme, button }) => theme.buttons[button].hover.color};
-        border: ${ ({ theme, button }) => theme.buttons[button].hover.border };
+        background-color: ${({ theme, buttontype }) => theme.buttons[buttontype].hover.backgroundColor};
+        color: ${({ theme, buttontype }) => theme.buttons[buttontype].hover.color};
+        border: ${ ({ theme, buttontype }) => theme.buttons[buttontype].hover.border };
     }
 
 `;

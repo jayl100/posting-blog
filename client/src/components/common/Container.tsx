@@ -11,18 +11,39 @@ function Container({ children, width }: Props) {
   return (
     <>
       <Header />
-      <ContainerStyled width={ width }>
-        { children }
-      </ContainerStyled>
+      <div>
+      <ContainerSetting width={ width }>
+        <ContainerStyled>
+          { children }
+        </ContainerStyled>
+      </ContainerSetting>
+      </div>
       <Footer />
     </>
-  )
+  );
 }
 
-const ContainerStyled = styled.div<Props>`
+const ContainerSetting = styled.div<Props>`
     max-width: ${ (props) => props.width }px;
+    width: 100%;
+
     margin: 0 auto;
-    padding: 80px 0;
+    padding: 0 20px;
+
 `;
+
+const ContainerStyled = styled.div`
+    width: 100%;
+    
+    margin: 100px 0;
+
+    display: flex;
+    //flex-wrap: wrap;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
+
 
 export default Container;

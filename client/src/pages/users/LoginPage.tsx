@@ -2,24 +2,29 @@ import styled from 'styled-components';
 import Input from '../../components/forms/Input.tsx';
 import Button from '../../components/buttons/Button.tsx';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Title from '../../components/Title.tsx';
 import { ILogin } from '../../type/type.ts';
 import useAuth from '../../hooks/useAuth.ts';
 
 
-function Login() {
+function LoginPage() {
   const { register, handleSubmit } = useForm<ILogin>();
   const { handleLogin } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = (data: ILogin) => {
     console.log(data);
     handleLogin(data)
   };
 
+  const toSignup = () => {
+    navigate('/users/signup')
+  }
+
   return (
     <>
-      <Title bottom="60px">로그인</Title>
+      <Title bottomsize="60px">로그인</Title>
       <LoginStyled onSubmit={ handleSubmit(onSubmit) }>
         <div className="input">
           <Input label="이메일" placeholder="아이디를 입력해 주세요." type="email"
@@ -33,8 +38,8 @@ function Login() {
           </div>
         </div>
         <div className="btn">
-          <Button button="outlined" type="button"> 회원가입</Button>
-          <Button button="filled" type="submit"> 로그인</Button>
+          <Button buttontype="outlined" type="button" onClick={() => {toSignup()}}> 회원가입</Button>
+          <Button buttontype="filled" type="submit"> 로그인</Button>
         </div>
       </LoginStyled>
     </>
@@ -42,8 +47,8 @@ function Login() {
 }
 
 const LoginStyled = styled.form`
-
-
+    width: 100%;
+    
     .input {
         display: flex;
         flex-direction: column;
@@ -74,4 +79,4 @@ const LoginStyled = styled.form`
     }
 `;
 
-export default Login;
+export default LoginPage;

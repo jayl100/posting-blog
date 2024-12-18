@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import React, { forwardRef } from 'react';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
 }
 
 
@@ -20,15 +20,18 @@ const InputStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
 
 
     label {
         font-size: ${ ({ theme }) => theme.fontSize.text };
+        text-align: left;
     }
 
     input {
+        width: 100%;
+
         height: 64px;
-        width: 600px;
         border: 1px solid ${ ({ theme }) => theme.color.lightGrey };
         font-size: ${ ({ theme }) => theme.fontSize.text };
         padding-left: 20px;

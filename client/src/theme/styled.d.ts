@@ -1,6 +1,6 @@
 import 'styled-components';
 
-export type ButtonStyle = 'filled' | 'outlined' | 'sFilled' | 'sOutlined';
+export type buttontypes = 'filled' | 'outlined' | 'sFilled' | 'sOutlined';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -34,7 +34,7 @@ declare module 'styled-components' {
       desktop: string;
     },
     buttons: {
-      [key in ButtonStyle]: {
+      [key in buttontypes]: {
         width: string;
         height: string;
         fontSize: string;

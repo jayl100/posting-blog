@@ -3,55 +3,69 @@ import logo from '../../assets/BLOG_footer.svg';
 
 function Footer() {
   return (
-    <FooterStyled>
-      <Contents>
-        <div className="left">
-          <div className="logo">
-            <img src={ logo } alt="" />
+    <>
+      <FooterStyled>
+        <MaxWidthContainer>
+          <div className="contents">
+            <div className="left">
+              <div className="logo">
+                <img src={ logo } alt="" />
+              </div>
+              <p>
+                Copyright 2024. BLOG All pictures cannot be copied without permission.
+              </p>
+            </div>
+            <div className="right">
+              <a href="/">게시판</a>
+              <a href="/">글쓰기</a>
+              <a href="/">로그인</a>
+            </div>
           </div>
-          <p>
-            Copyright 2024. BLOG All pictures cannot be copied without permission.
-          </p>
-        </div>
-        <div className="right">
-          <a href="/">게시판</a>
-          <a href="/">글쓰기</a>
-          <a href="/">로그인</a>
-        </div>
-
-      </Contents>
-    </FooterStyled>
+        </MaxWidthContainer>
+      </FooterStyled>
+    </>
   );
 }
 
 const FooterStyled = styled.div`
     background-color: ${ ({ theme }) => theme.color.secondary };
+
 `;
 
-const Contents = styled.div`
-
-    width: ${ ({ theme }) => theme.width.default };
+const MaxWidthContainer = styled.div`
+    max-width: ${ ({ theme }) => theme.width.default };
     height: 360px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    padding: 80px 20px;
     margin: 0 auto;
-    padding: 80px 0;
 
-    color: #fff;
 
-    .left {
+    .contents {
+        width: 100%;
+        height: 100%;
         display: flex;
-        flex-direction: column;
+        flex-wrap: nowrap;
         justify-content: space-between;
-    }
+        
+        margin: 0 auto;
+        color: #fff;
 
-    .right {
-        display: flex;
-        flex-direction: column-reverse;
-        gap: 1.8rem;
-        font-size: ${({ theme }) => theme.fontSize.h3};
-        font-weight: 500;
+        .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 1.8rem;
+            font-size: ${ ({ theme }) => theme.fontSize.h3 };
+            font-weight: 500;
+
+            a:hover {
+                color: ${ ({ theme }) => theme.color.lightGrey };
+            }
+        }
     }
 
 `;

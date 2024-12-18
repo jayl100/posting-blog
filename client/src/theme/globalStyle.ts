@@ -2,6 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
     * {
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
         box-sizing: border-box;
         list-style: none;
         text-decoration: none;
@@ -10,13 +12,13 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body {
-        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 
         font-size: 1rem;
         line-height: 1.2;
         font-weight: 400;
         background-color: #fff;
         color: #000;
+        
     }
 
     button {
@@ -26,6 +28,30 @@ const GlobalStyle = createGlobalStyle`
 
     a {
         color: inherit;
+    }
+    
+    input {
+        border: none;
+        font-size: 1rem;
+        line-height: 1.2;
+        font-weight: 400;        
+        color: inherit;
+        &:focus {
+            outline: none;
+        }
+    }
+    
+    textarea {
+        border: none;
+        font-size: 1rem;
+        line-height: 1.2;
+        font-weight: 400;
+        color: inherit;
+        resize: none;
+        &:focus {
+            outline: none;
+        }
+        
     }
 
     //input:focus {
