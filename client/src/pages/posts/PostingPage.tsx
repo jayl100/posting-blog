@@ -6,14 +6,14 @@ import usePosts from '../../hooks/usePosts.ts';
 import Button from '../../components/buttons/Button.tsx';
 
 function PostingPage() {
-
   const { register, handleSubmit } = useForm<IPosting>();
   const { handlePosting } = usePosts();
-  // const navigate = useNavigate();
 
   const onSubmit = (data: IPosting) => {
+    if (data) {
     handlePosting(data);
     alert('등록 완료되었습니다.');
+    }
   };
 
   return (

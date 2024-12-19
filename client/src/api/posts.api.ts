@@ -16,7 +16,12 @@ export const postingApi = async (data: IPosting) => {
   return response.data;
 }
 
-export const postDetailApi = async (postId: string) => {
+export const postDetailApi = async (postId: number) => {
   const response = await requestHandler<IPost>('get', `/posts/${postId}`);
+  return response.data;
+}
+
+export const postPutApi = async (postId: number, data: IPost) => {
+  const response = await requestHandler('put', `/posts/posting/${postId}`, data)
   return response.data;
 }

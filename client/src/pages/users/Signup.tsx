@@ -14,7 +14,6 @@ function Signup() {
 
   const onSubmit = (data: ISignup) => {
     signupApi(data).then((res) => {
-      console.log(res);
       alert(`${data.name}님 ${res.data.message}`);
         navigate('/users/login');
       }

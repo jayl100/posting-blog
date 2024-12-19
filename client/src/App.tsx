@@ -4,17 +4,20 @@ import { RouterProvider } from 'react-router-dom';
 import theme from './theme/theme.ts';
 import router from './routes/Route.tsx';
 import AuthProvider from './contexts/AuthProvider.tsx';
+import { PostProvider } from './contexts/postContext.tsx';
 
 function App() {
 
   return (
     <>
-      <AuthProvider>
-        <ThemeProvider theme={ theme }>
-          <RouterProvider router={ router } />
-          <GlobalStyle />
-        </ThemeProvider>
-      </AuthProvider>
+      <PostProvider>
+        <AuthProvider>
+          <ThemeProvider theme={ theme }>
+            <RouterProvider router={ router } />
+            <GlobalStyle />
+          </ThemeProvider>
+        </AuthProvider>
+      </PostProvider>
     </>
   );
 }

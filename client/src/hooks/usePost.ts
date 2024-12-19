@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { postDetailApi } from '../api/posts.api.ts';
 import { IPost } from '../type/type.ts';
 
-const usePost = (postId?: string) => {
+const usePost = (postId?: number) => {
   const [ isPostInfo, setIsPostInfo ] = useState<IPost | null>(null);
 
   useEffect(() => {
     if (!postId) {
-      alert("게시글이 없습니다.")
+      alert(`usePost, 게시글이 없습니다.${postId}` );
       return;
     }
 
@@ -15,6 +15,7 @@ const usePost = (postId?: string) => {
       try {
         const res = await postDetailApi(postId);
         setIsPostInfo(res);
+        // res: IPost
 
       } catch (err: any) {
         if (err.response && err.response.data) {
@@ -24,16 +25,15 @@ const usePost = (postId?: string) => {
         }
         throw err;
       }
-    }
+    };
+    fetchPost();
+  }, [ postId ]);
 
-      fetchPost();
-
-    }, [ postId ]);
 
   return {
-    isPostInfo
-  }
-}
+    isPostInfo,
+  };
+};
 
 
 export default usePost;

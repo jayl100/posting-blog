@@ -6,22 +6,29 @@ import Title from '../../components/Title.tsx';
 import Button from '../../components/buttons/Button.tsx';
 import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
+import useModifyPost from '../../hooks/useModifyPost.ts';
 
-type ParamsType = {
-  id?: string;
-}
 
 function PostDetail() {
   const { isAuth } = useContext(AuthContext);
-  const { id } = useParams<ParamsType>();
-  const { isPostInfo } = usePost(id);
+  const { id } = useParams() as { id: string };
+  const idInt = parseInt(id);
+  const { isPostInfo } = usePost(idInt);
+  const {handlePutPost } = useModifyPost(idInt);
 
   // loading
   if (!isPostInfo) {
     return;
   }
 
+  const letsGoModify = () => {
+    console.log(isPostInfo, 'pasdpifjasdfoasidjfaosidf');
+    location.href = (`/posts/posting/${id}`);
+  };
+
+
   return (
+    <>
     <PostDetailStyled>
       <div className="title">
         <div>{ formattedDate(isPostInfo.createdAt) }</div>
@@ -33,15 +40,16 @@ function PostDetail() {
       <div className="btn">
         <Button buttontype="sFilled" onClick={ () => {history.back();} }>목록</Button>
         { isAuth ?
-          <div className='auth-btn'>
-            <Button buttontype="sOutlined" onClick={ () => {history.back();} }>수정</Button>
-            <Button buttontype="sOutlined" onClick={ () => {history.back();} }>삭제</Button>
+          <div className="auth-btn">
+            <Button buttontype="sOutlined" onClick={ () => letsGoModify() }>수정</Button>
+            <Button buttontype="sOutlined" onClick={ () => { history.back() } }>삭제</Button>
           </div>
           :
           ''
         }
       </div>
     </PostDetailStyled>
+    </>
   );
 }
 
@@ -74,11 +82,11 @@ const PostDetailStyled = styled.div`
 
     .btn {
         margin-top: 20px;
-        
+
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        
+
         .auth-btn {
             display: flex;
             gap: 12px;

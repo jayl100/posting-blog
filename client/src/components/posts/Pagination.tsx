@@ -47,29 +47,31 @@ const PaginationStyled = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     button {
         height: 30px;
         width: 30px;
         background-color: white;
-        // color: ${ ({ theme }) => theme.color.lightGrey };
+            // color: ${ ({ theme }) => theme.color.lightGrey };
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         &:disabled {
             color: ${ ({ theme }) => theme.color.d9 };;
         }
     }
+
     .active {
-        background-color: ${({ theme }) => theme.color.f9};
-        color: ${ ({ theme }) => theme.color.secondary };
+        background-color: #fff4f8;
+        color: ${ ({ theme }) => theme.color.primary };
         font-weight: 700;
-        border: 1px solid ${ ({ theme }) => theme.color.d9}; 
+        border: 1px solid ${ ({ theme }) => theme.color.primary };
         border-radius: 4px;
     }
+
     .unactive {
-             color: ${ ({ theme }) => theme.color.lightGrey };
+        color: ${ ({ theme }) => theme.color.lightGrey };
 
     }
 `;
