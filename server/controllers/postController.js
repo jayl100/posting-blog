@@ -66,7 +66,7 @@ const postDetail = async (req, res, next) => {
     const post = await Posts.findOne({ where: { id: id } });
 
     if (!post) {
-      throw new appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
+      throw nnew appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
     }
 
     return res.status(StatusCodes.OK).json(post);
@@ -107,7 +107,6 @@ const postModify = async (req, res, next) => {
 
     const updatePost = await postModifyService(id, authUser.id, contents);
     return res.status(StatusCodes.OK).json(updatePost);
-
 
   } catch (err) {
     next(err);
