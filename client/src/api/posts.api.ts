@@ -1,5 +1,5 @@
 import requestHandler from './http';
-import { IMeta, IPost, IPosting, IPostList } from '../type/type.ts';
+import { IMeta, IPost, IPostList } from '../type/type.ts';
 
 interface IPostsResponse {
   data: IPostList[],
@@ -11,7 +11,7 @@ export const fetchPostsApi = async (page: number, limit: number): Promise<IPosts
   return response.data;
 }
 
-export const postingApi = async (data: IPosting) => {
+export const postingApi = async (data: IPost) => {
   const response = await requestHandler('post', `/posts/posting`, data);
   return response.data;
 }

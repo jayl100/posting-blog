@@ -4,9 +4,11 @@ import PostsList from '../../components/posts/PostsList.tsx';
 import Pagination from '../../components/posts/Pagination.tsx';
 import usePosts from '../../hooks/usePosts.ts';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function PostListPage() {
   const { isMeta, fetchPosts, isPosts } = usePosts();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -17,7 +19,7 @@ function PostListPage() {
 
   const handlePageChange = (page: number, limit: number = 8) => {
     console.log(`페이지 변경: ${page}`);
-    location.href = (`/posts?page=${page}&limit=${limit}`);
+    navigate(`/posts?page=${page}&limit=${limit}`);
   }
 
   return (

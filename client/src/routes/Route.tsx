@@ -28,12 +28,12 @@ const routeList = [
     width: 1000,
   },
   {
-    path: '/posts/:id',
-    element: <PostDetail/>,
+    path: `/posts/posting/:id`,
+    element: <PostingPage />,
     width: 1000,
   },
   {
-    path: '/posts/detail',
+    path: '/posts/:id',
     element: <PostDetail/>,
     width: 1000,
   },

@@ -2,10 +2,12 @@ import { ILogin } from '../type/type.ts';
 import { loginApi } from '../api/auth.api.ts';
 import { useContext } from 'react';
 import AuthContext from '../contexts/authContext.ts';
+import { useNavigate } from 'react-router-dom';
 
 
 const useAuth = () => {
   const { isAuth, login, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = (data: ILogin) => {
 
@@ -16,7 +18,7 @@ const useAuth = () => {
       }
       login();
       alert('login successful');
-      location.href = ('/');
+      navigate('/');
 
     }).catch((err: any) => {
       if (err.response && err.response.data) {

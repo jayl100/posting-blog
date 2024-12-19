@@ -1,20 +1,59 @@
 import styled from 'styled-components';
 import Title from '../../components/Title.tsx';
 import { useForm } from 'react-hook-form';
-import { IPosting } from '../../type/type.ts';
+import { IPost, IPosting } from '../../type/type.ts';
 import usePosts from '../../hooks/usePosts.ts';
 import Button from '../../components/buttons/Button.tsx';
+import useModifyPost from '../../hooks/useModifyPost.ts';
+import { useNavigate, useParams } from 'react-router-dom';
+import usePost from '../../hooks/usePost.ts';
+import { useEffect } from 'react';
 
 function PostingPage() {
-  const { register, handleSubmit } = useForm<IPosting>();
+  const navigate = useNavigate();
   const { handlePosting } = usePosts();
+  const { id } = useParams() as { id: string };
+  const idInt = parseInt(id);
+  const { isPostInfo } = usePost(idInt);
+  const { handlePutPost } = useModifyPost(idInt);
+  const { register, handleSubmit, setValue, reset } = useForm<IPost>({
+    mode: 'onBlur',
+    reValidateMode: 'onSubmit',
+    shouldFocusError: true,
+    defaultValues: {
+      title: '',
+      content: '',
+    },
+  });
 
-  const onSubmit = (data: IPosting) => {
-    if (data) {
-    handlePosting(data);
-    alert('등록 완료되었습니다.');
+  useEffect(() => {
+    if (!isPostInfo) return;
+
+    setValue('title', isPostInfo.title, { shouldValidate: true });
+    setValue('content', isPostInfo.content, { shouldValidate: true });
+
+  }, [ isPostInfo ]);
+
+  const onSubmit = async (data: IPosting) => {
+    try {
+      if (!idInt && data) {
+        handlePosting(data);
+        alert('등록 완료되었습니다.');
+        navigate(`/posts/`);
+        reset();
+      } else {
+        handlePutPost(data);
+        alert('수정이 완료되었습니다.');
+        navigate(`/posts/${ idInt }`);
+        reset();
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
+
   };
+
 
   return (
     <>
@@ -23,7 +62,9 @@ function PostingPage() {
         <div className="input-style">
           <input
             placeholder="제목을 입력해 주세요." type="text"
-            { ...register('title', { required: '제목을 입력해 주세요.' }) }
+            { ...register('title', {
+              required: '제목을 입력해 주세요.',
+            }) }
           />
           <textarea
             placeholder="내용을 입력해 주세요."
@@ -31,8 +72,8 @@ function PostingPage() {
           />
         </div>
         <div className="btn">
-          <Button buttontype="outlined" type="button" onClick={() => {history.back()}}>취소</Button>
-          <Button buttontype="filled" type="submit">등록</Button>
+          <Button buttontype="outlined" type="button" onClick={ () => {navigate(-1)} }>취소</Button>
+          <Button buttontype="filled" type="submit">{ idInt ? '수정' : '등록' }</Button>
         </div>
       </PostingStyled>
     </>

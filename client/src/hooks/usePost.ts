@@ -7,7 +7,7 @@ const usePost = (postId?: number) => {
 
   useEffect(() => {
     if (!postId) {
-      alert(`usePost, 게시글이 없습니다.${postId}` );
+      // alert(`usePost, 게시글이 없습니다.${postId}` );
       return;
     }
 

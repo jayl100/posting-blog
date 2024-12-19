@@ -58,3 +58,8 @@ export interface IMeta {
   totalPages: number;
   currentPage: number;
 }
+
+export interface IModifyPost {
+  title: string;
+  content: string;
+}

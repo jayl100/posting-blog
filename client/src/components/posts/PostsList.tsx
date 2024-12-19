@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 import { formattedDate } from '../../utils/dateFormat.ts';
 import { IPostList } from '../../type/type.ts';
+import { useNavigate } from 'react-router-dom';
 
-interface PostListProps {
+export interface PostListProps {
   posts: IPostList[];
 }
 
 function PostsList({ posts }: PostListProps) {
+  const navigate = useNavigate();
 
   const handlePostLink = (id: number) => {
-    location.href = (`/posts/${id}`);
+    navigate(`/posts/${id}`);
   };
 
   return (

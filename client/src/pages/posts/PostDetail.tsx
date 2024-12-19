@@ -1,29 +1,27 @@
 import styled from 'styled-components';
 import usePost from '../../hooks/usePost.ts';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formattedDate } from '../../utils/dateFormat.ts';
 import Title from '../../components/Title.tsx';
 import Button from '../../components/buttons/Button.tsx';
 import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
-import useModifyPost from '../../hooks/useModifyPost.ts';
 
 
 function PostDetail() {
+  const navigate = useNavigate();
   const { isAuth } = useContext(AuthContext);
   const { id } = useParams() as { id: string };
   const idInt = parseInt(id);
   const { isPostInfo } = usePost(idInt);
-  const {handlePutPost } = useModifyPost(idInt);
 
   // loading
   if (!isPostInfo) {
-    return;
+    return null;
   }
 
   const letsGoModify = () => {
-    console.log(isPostInfo, 'pasdpifjasdfoasidjfaosidf');
-    location.href = (`/posts/posting/${id}`);
+    navigate( `/posts/posting/${idInt}`);
   };
 
 
@@ -38,11 +36,11 @@ function PostDetail() {
         <div className="text">{ isPostInfo.content }</div>
       </div>
       <div className="btn">
-        <Button buttontype="sFilled" onClick={ () => {history.back();} }>목록</Button>
+        <Button buttontype="sFilled" onClick={ () => {navigate(-1)} }>목록</Button>
         { isAuth ?
           <div className="auth-btn">
-            <Button buttontype="sOutlined" onClick={ () => letsGoModify() }>수정</Button>
-            <Button buttontype="sOutlined" onClick={ () => { history.back() } }>삭제</Button>
+            <Button buttontype="sOutlined" onClick={letsGoModify}>수정</Button>
+            <Button buttontype="sOutlined" onClick={ () => { navigate(1)} }>삭제</Button>
           </div>
           :
           ''

@@ -3,13 +3,18 @@ import logo from '../../assets/BLOG_primary.svg';
 import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
 import useAuth from '../../hooks/useAuth.ts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function Header() {
   const { isAuth } = useContext(AuthContext);
   const { handleLogout } = useAuth();
+  const navigate = useNavigate();
 
+  const resetPost = () => {
+    navigate('/posts/posting')
+    location.reload();
+  }
 
   return (
     <>
@@ -22,7 +27,7 @@ function Header() {
           </div>
           <ul className="nav">
             <li><Link to={`/posts`}>게시판</Link></li>
-            { isAuth ? <li><Link to="/posts/posting">글쓰기</Link></li> : "" }
+            { isAuth ? <li><Link to="/posts/posting" onClick={resetPost}>글쓰기</Link></li> : "" }
           </ul>
           { isAuth ?
             (<ul>

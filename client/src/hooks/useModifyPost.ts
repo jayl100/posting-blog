@@ -1,36 +1,27 @@
 import { postPutApi } from '../api/posts.api.ts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import usePost from './usePost.ts';
-import { IPost, IPostList } from '../type/type.ts';
+import { IModifyPost, IPost} from '../type/type.ts';
+import { useNavigate } from 'react-router-dom';
 
-interface IModifyPost {
-  title: string | undefined;
-  content: string | undefined;
-}
-
-
-const useModifyPost = (id: number) => {
-
+const useModifyPost = (id?: number) => {
+  const navigate = useNavigate();
   const { isPostInfo } = usePost(id);
-
   const [ isPutPost, setIsPutPost ] = useState<IModifyPost>({
-    title: isPostInfo?.title,
-    content: isPostInfo?.content,
+    title: isPostInfo?.title || '',
+    content: isPostInfo?.content || '',
   });
 
-
-  if (!id) {
-    alert(`usePost, 게시글이 없습니다.${ id }`);
-    return;
-  }
-
   const handlePutPost = async (data: IPost) => {
+    if (!id) {
+      navigate('/posts/posting');
+      return;
+    }
     try {
-      if (!id) {return;}
       const res = await postPutApi(id, data);
-      setIsPutPost(res.data);
-      console.log('resalsdkj', res.data);
-      return isPutPost;
+      setIsPutPost(res);
+      return res;
+
     } catch (err: any) {
       if (err.response && err.response.data) {
         alert(err.response.data.message);
@@ -40,7 +31,6 @@ const useModifyPost = (id: number) => {
       throw err;
     }
   };
-
 
   return {
     isPutPost,
