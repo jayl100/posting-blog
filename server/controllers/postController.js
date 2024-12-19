@@ -7,17 +7,29 @@ const appError = require('../utils/appError');
 // 게시글 리스트
 const postList = async (req, res, next) => {
   try {
-    const posts = await Posts.findAll({
+
+    const page = parseInt(req.query.page, 5) || 1;
+    const limit = parseInt(req.query.limit, 8) || 8;
+    const offset = (page - 1) * limit;
+
+    const totalItems = await Posts.count();
+
+    const posts = (await Posts.findAll({
       attributes: [ 'id', 'title', 'content', 'userId', 'createdAt', 'updatedAt' ],
       include: [ {
         model: User,
         as: 'user',
         attributes: [ 'name' ],
-      } ]
-    });
+      } ],
+      order: [ [ 'createdAt', 'DESC' ] ],
+      limit: limit,
+      offset: offset,
+    }));
+
+    const totalPages = Math.ceil(totalItems / limit);
 
     const modifiedPosts = posts.map(post => {
-      const raw = post.get({ plain: true });
+      const raw = post.get({ plain: true }); // 배열 안 복잡하게 꼬여있는 요소 빼내기
 
       return {
         id: raw.id,
@@ -29,11 +41,15 @@ const postList = async (req, res, next) => {
       };
     });
 
-    console.log(modifiedPosts);
-
-
     if (modifiedPosts.length > 0) {
-      return res.status(StatusCodes.OK).json(modifiedPosts);
+      return res.status(StatusCodes.OK).json({
+        data: modifiedPosts,
+        meta: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+        }
+      });
     }
 
     return res.status(StatusCodes.OK).json([]); // 게시글이 없습니다. 필요
@@ -51,7 +67,6 @@ const postDetail = async (req, res, next) => {
 
     if (!post) {
       throw new appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
-
     }
 
     return res.status(StatusCodes.OK).json(post);
@@ -62,7 +77,7 @@ const postDetail = async (req, res, next) => {
 };
 
 // 게시글 작성하기
-const postWrite = async (req, res, next) => {
+const posting = async (req, res, next) => {
   try {
     const authUser = await req.payload;
     const contents = req.body;
@@ -115,4 +130,4 @@ const postDelete = async (req, res, next) => {
   }
 };
 
-module.exports = { postList, postWrite, postDelete, postDetail, postModify };
+module.exports = { postList, posting, postDelete, postDetail, postModify };

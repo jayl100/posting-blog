@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { postList, postWrite, postDelete, postDetail, postModify } = require('../controllers/postController');
+const { postList, posting, postDelete, postDetail, postModify } = require('../controllers/postController');
 const { authMiddleware } = require('../middlewares/authMiddleware');
 
 
@@ -11,10 +11,10 @@ router.get('/', postList);
 router.get('/:id', postDetail);
 
 // 글쓰기
-router.post('/write', authMiddleware, postWrite);
+router.post('/posting', authMiddleware, posting);
 
 // 게시글 수정
-router.put('/:id', authMiddleware, postModify);
+router.put('/posting/:id', authMiddleware, postModify);
 
 // 게시글 삭제
 router.delete('/:id', authMiddleware, postDelete);
