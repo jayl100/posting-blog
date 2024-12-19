@@ -49,7 +49,6 @@ function Home() {
             </a>
           </div>
           <PostsList posts={isPosts}/>
-          {/*<LatestPosts />*/}
         </div>
       </HomeStyled>
     </>

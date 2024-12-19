@@ -15,28 +15,36 @@ function PostListPage() {
     const page = parseInt(params.get('page') || '1', 10);
     const limit = parseInt(params.get('limit') || '8', 10);
     fetchPosts(page, limit);
-  }, [location.search, fetchPosts]);
+
+    }, [ location.search, fetchPosts ]);
 
   const handlePageChange = (page: number, limit: number = 8) => {
-    console.log(`페이지 변경: ${page}`);
-    navigate(`/posts?page=${page}&limit=${limit}`);
+    console.log(`페이지 변경: ${ page }`);
+    navigate(`/posts?page=${ page }&limit=${ limit }`);
   }
 
   return (
     <>
       <Title bottomsize="60px">게시판</Title>
       <PostListStyled>
-        <PostsList posts={isPosts} />
+        <div className="total">총 { isMeta.totalItems } 개</div>
+        <PostsList posts={ isPosts } />
         <Pagination
-          currentPage={isMeta.currentPage} totalPages={isMeta.totalPages} onPageChange={(page) => {handlePageChange(page)}}/>
+          currentPage={ isMeta.currentPage } totalPages={ isMeta.totalPages }
+          onPageChange={ (page) => {handlePageChange(page)} } />
       </PostListStyled>
     </>
   );
 }
 
 const PostListStyled = styled.div`
-  width: 100%;
+    width: 100%;
 
+    .total {
+        width: 100%;
+        margin-bottom: 12px;
+        color: ${({ theme }) => theme.color.secondary};
+    }
 `;
 
 export default PostListPage;

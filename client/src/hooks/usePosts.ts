@@ -11,11 +11,12 @@ const usePosts = () => {
     currentPage: 1,
   });
 
-  const fetchPosts = useCallback(async (page: number = 1, limit: number = 8) => {
+  const fetchPosts = useCallback(async (page: number, limit: number = 8) => {
     try {
       const res = await fetchPostsApi(page, limit);
       setIsPosts(res.data);
       setIsMeta(res.meta);
+      console.log('asdfasdf',res.meta)
 
     } catch (err: any) {
       if (err.response && err.response.data) {

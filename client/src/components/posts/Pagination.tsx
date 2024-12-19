@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
+import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from 'react-icons/ri';
+import usePagination from '../../hooks/usePagination.ts';
 
 interface PaginationProps {
   currentPage: number;
@@ -8,19 +10,27 @@ interface PaginationProps {
 }
 
 function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+  const visiblePages = usePagination(currentPage, totalPages, 5);
+  // 배열을 5개로 쪼개는거 찾아보기, current page 기준으로 쪼개는거.
+  // curerntPage를 중심으로 -2 +2 하기
 
 
   return (
     <>
       <PaginationStyled>
         <button
+          onClick={ () => onPageChange(1) }
+          disabled={ currentPage === 1 }
+        >
+          <RiArrowLeftDoubleFill className="icon" />
+        </button>
+        <button
           onClick={ () => onPageChange(currentPage - 1) }
           disabled={ currentPage === 1 }
         >
           <FaArrowLeft />
         </button>
-        { pages.map((page) => (
+        { visiblePages.map((page) => (
           <button
             key={ page }
             onClick={ () => onPageChange(page) }
@@ -29,11 +39,18 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
             { page }
           </button>
         )) }
+
         <button
           onClick={ () => onPageChange(currentPage + 1) }
           disabled={ currentPage === totalPages }
         >
           <FaArrowRight />
+        </button>
+        <button
+          onClick={ () => onPageChange(totalPages) }
+          disabled={ currentPage === totalPages }
+        >
+          <RiArrowRightDoubleFill className="icon" />
         </button>
       </PaginationStyled>
     </>
@@ -60,6 +77,11 @@ const PaginationStyled = styled.div`
         &:disabled {
             color: ${ ({ theme }) => theme.color.d9 };;
         }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
     }
 
     .active {
@@ -74,6 +96,8 @@ const PaginationStyled = styled.div`
         color: ${ ({ theme }) => theme.color.lightGrey };
 
     }
+
+
 `;
 
 export default Pagination;
