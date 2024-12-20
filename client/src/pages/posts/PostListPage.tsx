@@ -7,15 +7,14 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function PostListPage() {
-  const { isMeta, fetchPosts, isPosts } = usePosts();
   const navigate = useNavigate();
+  const { isMeta, fetchPosts, isPosts } = usePosts();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = parseInt(params.get('page') || '1', 10);
     const limit = parseInt(params.get('limit') || '8', 10);
     fetchPosts(page, limit);
-
     }, [ location.search, fetchPosts ]);
 
   const handlePageChange = (page: number, limit: number = 8) => {
@@ -27,8 +26,8 @@ function PostListPage() {
     <>
       <Title bottomsize="60px">게시판</Title>
       <PostListStyled>
-        <div className="total">총 { isMeta.totalItems } 개</div>
-        <PostsList posts={ isPosts } />
+        {/*<div className="total">총 { isMeta.totalItems } 개</div>*/}
+        <PostsList posts={ isPosts } total={isMeta.totalItems}/>
         <Pagination
           currentPage={ isMeta.currentPage } totalPages={ isMeta.totalPages }
           onPageChange={ (page) => {handlePageChange(page)} } />

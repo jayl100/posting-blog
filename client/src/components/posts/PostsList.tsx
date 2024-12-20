@@ -4,10 +4,11 @@ import { IPostList } from '../../type/type.ts';
 import { useNavigate } from 'react-router-dom';
 
 export interface PostListProps {
+  total?: number;
   posts: IPostList[];
 }
 
-function PostsList({ posts }: PostListProps) {
+function PostsList({ posts, total }: PostListProps) {
   const navigate = useNavigate();
 
   const handlePostLink = (id: number) => {
@@ -16,10 +17,11 @@ function PostsList({ posts }: PostListProps) {
 
   return (
     <>
+      <TotalCountStyled>{ total ? `총 ${total} 개` : '' }</TotalCountStyled>
       <PostListDetailStyled>
         <tbody>
         { posts.map((post: IPostList) => (
-          <tr key={ post.id } onClick={() => handlePostLink(post.id)}>
+          <tr key={ post.id } onClick={ () => handlePostLink(post.id) }>
             <td className="id">{ post.id }</td>
             <td className="title">{ post.title }</td>
             <td className="name">{ post.name }</td>
@@ -32,11 +34,21 @@ function PostsList({ posts }: PostListProps) {
   );
 }
 
+const TotalCountStyled = styled.div`
+        width: 100%;
+        margin-bottom: 12px;
+        color: ${({ theme }) => theme.color.secondary};
+`
+
 const PostListDetailStyled = styled.table`
+    
+    
     display: flex;
     border-top: 2px solid ${ ({ theme }) => theme.color.secondary };
     border-bottom: 2px solid ${ ({ theme }) => theme.color.secondary };
     text-align: left;
+    
+
 
 tbody {
     width: 100%;

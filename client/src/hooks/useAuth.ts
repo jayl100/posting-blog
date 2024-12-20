@@ -1,4 +1,4 @@
-import { ILogin } from '../type/type.ts';
+import { ILogin, IUser } from '../type/type.ts';
 import { loginApi } from '../api/auth.api.ts';
 import { useContext } from 'react';
 import AuthContext from '../contexts/authContext.ts';
@@ -13,12 +13,12 @@ const useAuth = () => {
 
     loginApi(data).then((res) => {
       if (res) {
-        console.log('asdfasdfasdf', res.data.token);
         localStorage.setItem('token', res.data.token);
+        login(res.data.user);
+        alert('login successful');
+        navigate('/');
       }
-      login();
-      alert('login successful');
-      navigate('/');
+
 
     }).catch((err: any) => {
       if (err.response && err.response.data) {

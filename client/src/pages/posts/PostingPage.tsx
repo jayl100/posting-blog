@@ -7,11 +7,13 @@ import Button from '../../components/buttons/Button.tsx';
 import useModifyPost from '../../hooks/useModifyPost.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost.ts';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import AuthContext from '../../contexts/authContext.ts';
 
 function PostingPage() {
   const navigate = useNavigate();
   const { handlePosting } = usePosts();
+  const { getInfo } = useContext(AuthContext);
   const { id } = useParams() as { id: string };
   const idInt = parseInt(id);
   const { isPostInfo } = usePost(idInt);
@@ -28,6 +30,11 @@ function PostingPage() {
 
   useEffect(() => {
     if (!isPostInfo) return;
+
+    if (isPostInfo.id !== getInfo?.id) {
+      alert('권한이 없습니다.');
+      navigate(`/posts/${ idInt }`);
+    }
 
     setValue('title', isPostInfo.title, { shouldValidate: true });
     setValue('content', isPostInfo.content, { shouldValidate: true });

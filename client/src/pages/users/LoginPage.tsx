@@ -14,7 +14,6 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const onSubmit = (data: ILogin) => {
-    console.log(data);
     handleLogin(data)
   };
 

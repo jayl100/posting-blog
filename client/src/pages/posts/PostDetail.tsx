@@ -10,7 +10,7 @@ import AuthContext from '../../contexts/authContext.ts';
 
 function PostDetail() {
   const navigate = useNavigate();
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, getInfo } = useContext(AuthContext);
   const { id } = useParams() as { id: string };
   const idInt = parseInt(id);
   const { isPostInfo } = usePost(idInt);
@@ -20,9 +20,15 @@ function PostDetail() {
     return null;
   }
 
+  const userAuth = getInfo?.id === isPostInfo.userId
+
   const letsGoModify = () => {
+    if (!isAuth && !userAuth) return null;
     navigate( `/posts/posting/${idInt}`);
   };
+
+  console.log(isPostInfo.userId, ',alsdjf,', getInfo?.id)
+
 
 
   return (
@@ -37,7 +43,7 @@ function PostDetail() {
       </div>
       <div className="btn">
         <Button buttontype="sFilled" onClick={ () => {navigate(-1)} }>목록</Button>
-        { isAuth ?
+        { isAuth && userAuth ?
           <div className="auth-btn">
             <Button buttontype="sOutlined" onClick={letsGoModify}>수정</Button>
             <Button buttontype="sOutlined" onClick={ () => { navigate(1)} }>삭제</Button>

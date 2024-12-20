@@ -48,7 +48,7 @@ function Home() {
               더보기 <IoIosArrowForward />
             </a>
           </div>
-          <PostsList posts={isPosts}/>
+          <PostsList posts={isPosts} />
         </div>
       </HomeStyled>
     </>
