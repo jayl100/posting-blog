@@ -8,7 +8,7 @@ const appError = require('../utils/appError');
 const postList = async (req, res, next) => {
   try {
 
-    const page = parseInt(req.query.page, 5) || 1;
+    const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 8) || 8;
     const offset = (page - 1) * limit;
 
@@ -66,7 +66,7 @@ const postDetail = async (req, res, next) => {
     const post = await Posts.findOne({ where: { id: id } });
 
     if (!post) {
-      throw nnew appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
+      throw new appError('게시글이 존재하지 않습니다.', StatusCodes.NOT_FOUND);
     }
 
     return res.status(StatusCodes.OK).json(post);

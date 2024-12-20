@@ -14,7 +14,11 @@ const userInfo = async (req, res, next) => {
       throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
     }
 
-    return res.status(StatusCodes.OK).json(userPage);
+    return res.status(StatusCodes.OK).json({
+      id: userPage.id,
+      email: userPage.email,
+      name: userPage.name,
+    });
 
   } catch (err) {
     next(err);
@@ -25,7 +29,29 @@ const userInfo = async (req, res, next) => {
 const userPosts = async (req, res, next) => {
   try {
     const authUser = await req.payload;
-    const myPosts = await Posts.findAll({ where: { userId: authUser.id } });
+    const myPosts = await Posts.findAll({
+      attributes: [ 'id', 'title', 'content', 'userId', 'createdAt', 'updatedAt' ],
+      include: [ {
+        model: User,
+        as: 'user',
+        attributes: [ 'name' ],
+      } ],
+      order: [ [ 'createdAt', 'DESC' ] ],
+      where: { userId: authUser.id }
+    });
+
+    const modifiedPosts = myPosts.map(post => {
+      const raw = post.get({ plain: true }); // 배열 안 복잡하게 꼬여있는 요소 빼내기
+
+      return {
+        id: raw.id,
+        title: raw.title,
+        name: raw.user.name,
+        userId: raw.userId,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
+      };
+    });
 
     if (!authUser) {
       throw new appError('회원정보를 찾을 수 없습니다.', StatusCodes.NOT_FOUND);
@@ -35,7 +61,8 @@ const userPosts = async (req, res, next) => {
       return res.status(StatusCodes.OK).json([]);
     }
 
-    return res.status(StatusCodes.OK).json(myPosts);
+    console.log(myPosts);
+    return res.status(StatusCodes.OK).json(modifiedPosts);
 
   } catch (err) {
     next(err);

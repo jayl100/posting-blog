@@ -41,7 +41,11 @@ const login = async (req, res, next) => {
 
     return res.status(StatusCodes.OK).json({
       message: '로그인 성공',
-      token: token.accessToken
+      token: token.accessToken,
+      user: {
+        email: userInfo.email,
+        password: userInfo.password,
+      }
     });
 
   } catch (err) {
