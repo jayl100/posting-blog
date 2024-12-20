@@ -35,8 +35,8 @@ function Signup() {
           <Input label="이름" placeholder="이름를 입력해 주세요." type="text"
                  { ...register('name', { required: '이름를 입력해 주세요.' }) }
           />
-          <Input label="비밀번호" placeholder="비밀번호를 입력해 주세요." type="password"
-                 { ...register('password', { required: '비밀번호를 입력해 주세요.' }) }
+          <Input label="비밀번호" placeholder="비밀번호를 6자 이상 입력해 주세요." type="password" minLength={6}
+                 { ...register('password', { required: '비밀번호를 6자 이상 입력해 주세요.' }) }
           />
         </div>
         <div className="btn">

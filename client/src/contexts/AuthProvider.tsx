@@ -12,7 +12,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [ isAuth, setIsAuth ] = useState(!!token);
   const [ getInfo, setGetInfo ] = useState<IUser | null>(null)
 
-  const login = (userData: IUser) => {
+  const login = () => {
     setIsAuth(true);
   };
 

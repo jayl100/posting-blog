@@ -12,13 +12,16 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body {
-
+        min-height: 100vh;
         font-size: 1rem;
         line-height: 1.2;
         font-weight: 400;
         background-color: #fff;
         color: #000;
-        
+        -ms-overflow-style: none;
+    }
+    ::-webkit-scrollbar {
+        display: none;
     }
 
     button {

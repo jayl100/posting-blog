@@ -62,3 +62,9 @@ export interface IModifyPost {
   title: string;
   content: string;
 }
+
+export interface IChangePassword {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordCheck: string;
+}

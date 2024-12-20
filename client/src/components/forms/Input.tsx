@@ -21,6 +21,7 @@ const InputStyled = styled.div`
     flex-direction: column;
     gap: 12px;
     width: 100%;
+    max-width: 600px;
 
 
     label {

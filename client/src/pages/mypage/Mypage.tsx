@@ -1,23 +1,23 @@
 import styled from 'styled-components';
-import { useContext, useEffect } from 'react';
+import { useContext, useState } from 'react';
 
 import AuthContext from '../../contexts/authContext.ts';
 import { useNavigate } from 'react-router-dom';
-import MyPosts from '../../components/mypage/myPosts.tsx';
 import Title from '../../components/Title.tsx';
-import theme from '../../theme/theme.ts';
-
+import MyTabMenu from '../../components/mypage/MyTabMenu.tsx';
+import MyChangePassword from '../../components/mypage/MyChangePassword.tsx';
+import MyWithdraw from '../../components/mypage/MyWidthdraw.tsx';
+import MyPosts from '../../components/mypage/MyPosts';
 
 function Mypage() {
   const navigate = useNavigate();
   const { isAuth, getInfo } = useContext(AuthContext);
+  const [ activeTab, setActiveTab ] = useState('posts')
 
   if (!isAuth) {
     alert('여기 아니야');
     navigate('/');
   }
-
-  console.log(getInfo)
 
 
   return (
@@ -30,12 +30,12 @@ function Mypage() {
         <div className="email-box">
           <p>{ getInfo?.email }</p>
         </div>
-        <div className="tap">
-          <button>나의 게시글</button>
-          <button>비밀번호 변경하기</button>
-          <button>회원 탈퇴하기</button>
+        <MyTabMenu activeTab={activeTab} setActiveTab={setActiveTab}/>
+        <div className="tap-content">
+          { activeTab === 'posts' && <MyPosts /> }
+          { activeTab === 'reset' && <MyChangePassword /> }
+          { activeTab === 'withdraw' && <MyWithdraw /> }
         </div>
-        <MyPosts />
       </MypageStyled>
     </>
   );
@@ -67,26 +67,27 @@ const MypageStyled = styled.div`
         flex-direction: row;
         align-items: center;
         margin-bottom: 60px;
-        
+
         button {
             text-align: center;
             align-content: center;
             width: 178px;
             height: 60px;
-            border-bottom: 1px solid ${({ theme }) => theme.color.d9};
-            color: ${({ theme }) => theme.color.mediumGrey};
+            border-bottom: 1px solid ${ ({ theme }) => theme.color.d9 };
+            color: ${ ({ theme }) => theme.color.mediumGrey };
             background-color: #fff;
             font-size: 16px;
             font-weight: 400;
-            
-            &:active {
-                border-bottom: 1px solid ${({ theme }) => theme.color.primary};
-                color: ${({ theme }) => theme.color.primary};
-                font-weight: 600;
-            }
+
+
         }
-        
-        
+        .active {
+            border-bottom: 1px solid ${ ({ theme }) => theme.color.primary };
+            color: ${ ({ theme }) => theme.color.primary };
+            font-weight: 600;
+        }
+
+
     }
 
 
