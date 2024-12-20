@@ -31,8 +31,7 @@ function Home() {
       <HomeStyled>
         <div className="main">
           <Title bottomsize="40px">
-            어서오세요.
-            <br />
+            &nbsp;어서오세요~<br/>
             모두의 BLOG 입니다.
           </Title>
           {isAuth ?
@@ -59,9 +58,8 @@ const HomeStyled = styled.div`
     width: 100%;
 
     .main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        width: 100%;
+        text-align: center;
         margin-bottom: 100px;
 
     }

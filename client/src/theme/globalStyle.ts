@@ -19,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: #fff;
         color: #000;
         -ms-overflow-style: none;
+        box-sizing: border-box;
     }
     ::-webkit-scrollbar {
         display: none;
@@ -56,10 +57,6 @@ const GlobalStyle = createGlobalStyle`
         }
         
     }
-
-    //input:focus {
-    //    outline: none;
-    //}
 
 `;
 
