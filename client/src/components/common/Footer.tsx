@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import logo from '../../assets/BLOG_footer.svg';
+import { useContext } from 'react';
+import AuthContext from '../../contexts/authContext.ts';
 
 function Footer() {
+  const { isAuth } = useContext(AuthContext);
+
   return (
     <>
       <FooterStyled>
@@ -16,9 +20,18 @@ function Footer() {
               </p>
             </div>
             <div className="right">
-              <a href="/">게시판</a>
-              <a href="/">글쓰기</a>
-              <a href="/">로그인</a>
+              { isAuth ?
+                (<>
+                    <a href="/users/mypage">마이페이지</a>
+                    <a href="/posts/posting">글쓰기</a>
+                  </>)
+                :
+                (<>
+                    <a href="/users/signup">회원가입</a>
+                    <a href="/users/login">로그인</a>
+                  </>)
+              }
+              <a href="/posts">게시판</a>
             </div>
           </div>
         </MaxWidthContainer>
@@ -29,7 +42,6 @@ function Footer() {
 
 const FooterStyled = styled.div`
     background-color: ${ ({ theme }) => theme.color.secondary };
-
 `;
 
 const MaxWidthContainer = styled.div`
@@ -37,8 +49,7 @@ const MaxWidthContainer = styled.div`
     height: 360px;
     padding: 80px 20px;
     margin: 0 auto;
-
-
+    
     .contents {
         width: 100%;
         height: 100%;
@@ -61,6 +72,7 @@ const MaxWidthContainer = styled.div`
             gap: 1.8rem;
             font-size: ${ ({ theme }) => theme.fontSize.h3 };
             font-weight: 500;
+            text-align: right;
 
             a:hover {
                 color: ${ ({ theme }) => theme.color.lightGrey };

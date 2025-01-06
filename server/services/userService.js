@@ -13,8 +13,12 @@ const signupService = async (userInfo) => {
     const existedEmail = await User.findOne({ where: { email: email } });
     const existedName = await User.findOne({ where: { name: name } });
 
-    if (existedEmail || existedName) {
-      throw new appError('이미 존재하는 이메일과 이름 입니다.', StatusCodes.CONFLICT);
+    if (existedEmail) {
+      throw new appError('이미 존재하는 이메일 입니다.', StatusCodes.CONFLICT);
+    }
+
+    if (existedName) {
+      throw new appError('이미 존재하는 이름 입니다.', StatusCodes.CONFLICT);
     }
 
     if (password.length < 6) {
@@ -114,9 +118,6 @@ const resetPasswordService = async (userInfo) => {
     throw err;
   }
 };
-
-// 유저인증
-
 
 
 module.exports = { signupService, loginService, logoutService, resetPasswordService };

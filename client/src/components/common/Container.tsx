@@ -9,7 +9,7 @@ interface Props {
 
 function Container({ children, width }: Props) {
   return (
-    <Hello>
+    <>
       <Header />
       <div>
       <ContainerSetting width={ width }>
@@ -19,12 +19,9 @@ function Container({ children, width }: Props) {
       </ContainerSetting>
       </div>
       <Footer />
-    </Hello>
+    </>
   );
 }
-
-const Hello = styled.div`
-`
 
 const ContainerSetting = styled.div<Props>`
     max-width: ${ (props) => props.width }px;

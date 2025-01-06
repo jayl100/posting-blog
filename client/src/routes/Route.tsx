@@ -10,6 +10,7 @@ import Signup from '../pages/users/Signup.tsx';
 import Mypage from '../pages/mypage/Mypage.tsx';
 import PostListPage from '../pages/posts/PostListPage.tsx';
 import ProtectedRoute from '../components/protect/ProtectedRoute.tsx';
+import NotFoundPage from '../pages/NotFound.tsx';
 
 interface RouteType {
   path: string;
@@ -75,6 +76,13 @@ const routeList: RouteType[] = [
     element: <Mypage />,
     width: 1200,
     protected: true,
+  },
+  // 404
+  {
+    path: '*',
+    element: <NotFoundPage />,
+    width: 1200,
+    protected: false,
   },
 ];
 

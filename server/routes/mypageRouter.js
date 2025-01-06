@@ -16,6 +16,6 @@ router.get('/posts', userPosts);
 router.put('/password', updatePassword);
 
 // 마이페이지 - 탈퇴
-router.delete('/', userDelete);
+router.post('/', userDelete);
 
 module.exports = router;

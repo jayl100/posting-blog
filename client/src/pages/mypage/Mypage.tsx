@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useContext, useState } from 'react';
-
 import AuthContext from '../../contexts/authContext.ts';
 import { useNavigate } from 'react-router-dom';
 import Title from '../../components/Title.tsx';
@@ -11,11 +10,12 @@ import MyPosts from '../../components/mypage/MyPosts';
 
 function Mypage() {
   const navigate = useNavigate();
-  const { isAuth, getInfo } = useContext(AuthContext);
+  const { isAuth, getInfo, logout } = useContext(AuthContext);
   const [ activeTab, setActiveTab ] = useState('posts')
 
   if (!isAuth) {
-    alert('여기 아니야');
+    alert('권한이 없습니다.');
+    logout();
     navigate('/');
   }
 
@@ -47,6 +47,9 @@ const MypageStyled = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    justify-items: center;
+    
 
     .email-box {
         background-color: #f2f2f2;
@@ -62,32 +65,12 @@ const MypageStyled = styled.div`
         }
     }
 
-    .tap {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 60px;
-
-        button {
-            text-align: center;
-            align-content: center;
-            width: 178px;
-            height: 60px;
-            border-bottom: 1px solid ${ ({ theme }) => theme.color.d9 };
-            color: ${ ({ theme }) => theme.color.mediumGrey };
-            background-color: #fff;
-            font-size: 16px;
-            font-weight: 400;
-
-
-        }
-        .active {
-            border-bottom: 1px solid ${ ({ theme }) => theme.color.primary };
-            color: ${ ({ theme }) => theme.color.primary };
-            font-weight: 600;
-        }
-
-
+    .tap-content {
+        display: contents;
+        //flex-direction: row;
+        //align-items: center;
+        //margin-bottom: 60px;
+        
     }
 
 

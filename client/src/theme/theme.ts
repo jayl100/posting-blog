@@ -8,6 +8,7 @@ const theme: DefaultTheme = {
     mediumGrey: '#444',
     d9: '#d9d9d9',
     f9: '#f9f9f9',
+    error: '#ec0000',
   },
   backgroundColor: {
     primary: '#fff',

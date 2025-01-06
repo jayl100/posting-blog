@@ -4,6 +4,8 @@ import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
 import useAuth from '../../hooks/useAuth.ts';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { IPosting } from '../../type/type.ts';
 
 
 function Header() {
@@ -26,7 +28,7 @@ function Header() {
         </div>
         <ul className="middle">
           <li><Link to={ `/posts` }>게시판</Link></li>
-          { isAuth ? <li><Link to="/posts/posting" onClick={ resetPost }>글쓰기</Link></li> : '' }
+          { isAuth && <li><Link to="/posts/posting" onClick={resetPost}>글쓰기</Link></li>}
         </ul>
         <div className="right">
           { isAuth ?

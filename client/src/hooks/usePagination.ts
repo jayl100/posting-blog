@@ -7,12 +7,6 @@ function usePagination(currentPage: number, totalPages: number, maxVisible: numb
     start = 1;
     end = Math.min(maxVisible, totalPages);
   }
-  //
-  // if (end < totalPages) {
-  //   end = totalPages;
-  //   start = Math.max(end - maxVisible , 1)
-  // }
-
 
   if (end === totalPages + 1) {
     end = Math.max(maxVisible, totalPages);

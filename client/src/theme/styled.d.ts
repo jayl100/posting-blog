@@ -11,6 +11,7 @@ declare module 'styled-components' {
       mediumGrey: string;
       d9: string;
       f9: string;
+      error: string;
     },
     backgroundColor: {
       primary: string;

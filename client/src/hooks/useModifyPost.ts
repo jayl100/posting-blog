@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const useModifyPost = (id?: number) => {
   const navigate = useNavigate();
-  const { isPostInfo } = usePost(id);
+  const { isPostInfo } = usePost();
   const [ isPutPost, setIsPutPost ] = useState<IModifyPost>({
     title: isPostInfo?.title || '',
     content: isPostInfo?.content || '',
@@ -14,13 +14,16 @@ const useModifyPost = (id?: number) => {
 
   const handlePutPost = async (data: IPost) => {
     if (!id) {
-      navigate('/posts/posting');
-      return;
+      alert('존재하지 않는 게시글 입니다.');
+      navigate('/posts');
+      return null;
     }
+
     try {
       const res = await postPutApi(id, data);
       setIsPutPost(res);
-      return res;
+      alert('게시글이 수정되었습니다..');
+      navigate(`/posts/${ id }`);
 
     } catch (err: any) {
       if (err.response && err.response.data) {

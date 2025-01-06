@@ -12,3 +12,7 @@ export const signupApi = async (data: ISignup) => {
     return response;
 };
 
+export const resetPWApi = async (data: ILogin) => {
+  const response = await requestHandler('put', `/users/reset`, data);
+  return response;
+}

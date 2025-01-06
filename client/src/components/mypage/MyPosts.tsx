@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { userPostApi } from '../../api/mypage.api.ts';
 import { IPostList } from '../../type/type.ts';
 import PostsList from '../posts/PostsList.tsx';
-import Title from '../Title.tsx';
 
 function MyPosts() {
   const [ userPosts, setUserPosts ] = useState<IPostList[]>([])
@@ -22,7 +21,7 @@ function MyPosts() {
 }
 
 const MyPostsStyled = styled.div`
-width: 100%;
+    width: 100%;
 `;
 
 export default MyPosts;

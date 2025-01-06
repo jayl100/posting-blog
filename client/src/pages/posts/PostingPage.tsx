@@ -16,11 +16,11 @@ function PostingPage() {
   const { getInfo } = useContext(AuthContext);
   const { id } = useParams() as { id: string };
   const idInt = parseInt(id);
-  const { isPostInfo } = usePost(idInt);
+  const { isPostInfo, fetchPost } = usePost();
   const { handlePutPost } = useModifyPost(idInt);
-  const { register, handleSubmit, setValue, reset } = useForm<IPost>({
+  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<IPost>({
     mode: 'onBlur',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onBlur',
     shouldFocusError: true,
     defaultValues: {
       title: '',
@@ -29,9 +29,11 @@ function PostingPage() {
   });
 
   useEffect(() => {
+    fetchPost(idInt);
+
     if (!isPostInfo) return;
 
-    if (isPostInfo.id !== getInfo?.id) {
+    if (isPostInfo.userId !== getInfo?.id) {
       alert('권한이 없습니다.');
       navigate(`/posts/${ idInt }`);
     }
@@ -39,44 +41,40 @@ function PostingPage() {
     setValue('title', isPostInfo.title, { shouldValidate: true });
     setValue('content', isPostInfo.content, { shouldValidate: true });
 
-  }, [ isPostInfo ]);
+  }, [ isPostInfo?.updatedAt ]);
 
   const onSubmit = async (data: IPosting) => {
-    try {
       if (!idInt && data) {
-        handlePosting(data);
-        alert('등록 완료되었습니다.');
-        navigate(`/posts/`);
+        await handlePosting(data);
         reset();
       } else {
-        handlePutPost(data);
-        alert('수정이 완료되었습니다.');
-        navigate(`/posts/${ idInt }`);
+        await handlePutPost(data);
         reset();
       }
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-
   };
 
 
   return (
     <>
-      <Title bottomsize="60px">글쓰기</Title>
+      <Title bottomsize="60px">{ idInt ? '글수정' : '글쓰기' }</Title>
       <PostingStyled onSubmit={ handleSubmit(onSubmit) }>
         <div className="input-style">
-          <input
+          <InputStyled
+            $errorColor={ errors?.title ? `#ec0000` : `#999` }
             placeholder="제목을 입력해 주세요." type="text"
             { ...register('title', {
               required: '제목을 입력해 주세요.',
             }) }
           />
-          <textarea
+
+          <TextareaStyled
+            $errorColor={ errors?.content ? `#ec0000` : `#999` }
             placeholder="내용을 입력해 주세요."
-            { ...register('content', { required: '내용을 입력해 주세요.' }) }
+            { ...register('content', {
+              required: '내용을 입력해 주세요.',
+            }) }
           />
+
         </div>
         <div className="btn">
           <Button buttontype="outlined" type="button" onClick={ () => {navigate(-1)} }>취소</Button>
@@ -86,6 +84,7 @@ function PostingPage() {
     </>
   );
 }
+
 
 const PostingStyled = styled.form`
     width: 100%;
@@ -98,39 +97,6 @@ const PostingStyled = styled.form`
         border-bottom: 2px solid ${ ({ theme }) => theme.color.secondary };
         border-top: 2px solid ${ ({ theme }) => theme.color.secondary };
         margin-bottom: 60px;
-
-
-        input {
-            padding: 0 20px;
-            font-size: ${ ({ theme }) => theme.fontSize.text };
-            height: 100px;
-            border-bottom: 1px solid ${ ({ theme }) => theme.color.lightGrey };
-
-            &::placeholder {
-                color: ${ ({ theme }) => theme.color.lightGrey };
-            }
-
-            &:focus {
-                outline: none;
-                background-color: ${ ({ theme }) => theme.color.f9 };
-            }
-        }
-
-
-        textarea {
-            height: 400px;
-            padding: 40px 20px;
-            font-size: ${ ({ theme }) => theme.fontSize.text };
-
-            &::placeholder {
-                color: ${ ({ theme }) => theme.color.lightGrey };
-            }
-
-            &:focus {
-                outline: none;
-                background-color: ${ ({ theme }) => theme.color.f9 };
-            }
-        }
     }
 
     .btn {
@@ -140,6 +106,37 @@ const PostingStyled = styled.form`
         gap: 22px;
     }
 `;
+
+const InputStyled = styled.input<{ $errorColor?: string }>`
+    padding: 0 20px;
+    font-size: ${ ({ theme }) => theme.fontSize.text };
+    height: 100px;
+    border-bottom: 1px solid ${ ({ theme }) => theme.color.lightGrey };
+
+    &::placeholder {
+        color: ${ props => props.$errorColor || '#fff' };
+    }
+
+    &:focus {
+        outline: none;
+        background-color: ${ ({ theme }) => theme.color.f9 };
+    }
+`
+
+const TextareaStyled = styled.textarea<{ $errorColor?: string }>`
+    height: 400px;
+    padding: 40px 20px;
+    font-size: ${ ({ theme }) => theme.fontSize.text };
+
+    &::placeholder {
+        color: ${ props => props.$errorColor || '#fff' };
+    }
+
+    &:focus {
+        outline: none;
+        background-color: ${ ({ theme }) => theme.color.f9 };
+    }
+`
 
 
 export default PostingPage;

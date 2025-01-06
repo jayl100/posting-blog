@@ -4,32 +4,47 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { formattedDate } from '../../utils/dateFormat.ts';
 import Title from '../../components/Title.tsx';
 import Button from '../../components/buttons/Button.tsx';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
 
 
 function PostDetail() {
-  const navigate = useNavigate();
   const { isAuth, getInfo } = useContext(AuthContext);
+  const navigate = useNavigate();
   const { id } = useParams() as { id: string };
   const idInt = parseInt(id);
-  const { isPostInfo } = usePost(idInt);
+  const { isPostInfo, fetchPost, deletePost } = usePost();
+
+  useEffect(() => {
+    fetchPost(idInt)
+  }, [isPostInfo?.updatedAt]);
 
   // loading
   if (!isPostInfo) {
     return null;
   }
-
   const userAuth = getInfo?.id === isPostInfo.userId
 
+
   const letsGoModify = () => {
-    if (!isAuth && !userAuth) return null;
+    if (!isAuth && !userAuth) {
+      alert('권한이 없습니다.');
+      return null;
+    }
     navigate( `/posts/posting/${idInt}`);
   };
 
-  console.log(isPostInfo.userId, ',alsdjf,', getInfo?.id)
+  const letsGoDelete = async () => {
+    if (!isAuth && !userAuth) {
+      alert('권한이 없습니다.');
+      return null;
+    }
 
-
+    const delAlert = confirm('게시글을 삭제하시겠습니까?')
+    if (delAlert) {
+    await deletePost(idInt);
+    }
+  }
 
   return (
     <>
@@ -42,11 +57,11 @@ function PostDetail() {
         <div className="text">{ isPostInfo.content }</div>
       </div>
       <div className="btn">
-        <Button buttontype="sFilled" onClick={ () => {navigate(-1)} }>목록</Button>
+        <Button buttontype="sFilled" onClick={ () => {navigate('/posts')} }>목록</Button>
         { isAuth && userAuth ?
           <div className="auth-btn">
             <Button buttontype="sOutlined" onClick={letsGoModify}>수정</Button>
-            <Button buttontype="sOutlined" onClick={ () => { navigate(1)} }>삭제</Button>
+            <Button buttontype="sOutlined" onClick={letsGoDelete}>삭제</Button>
           </div>
           :
           ''

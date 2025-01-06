@@ -5,42 +5,58 @@ import Button from '../../components/buttons/Button.tsx';
 import { useForm } from 'react-hook-form';
 import { ISignup } from '../../type/type.ts';
 import Title from '../../components/Title.tsx';
-import { signupApi } from '../../api/auth.api.ts';
+import { emailValidation, nameValidation, passwordValidation } from '../../utils/validationRules.ts';
+import useAuth from '../../hooks/useAuth.ts';
+import FormInput from '../../components/forms/FormInput.tsx';
+import React from 'react';
 
 
 function Signup() {
-  const { register, handleSubmit, } = useForm<ISignup>();
-  const navigate = useNavigate();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<ISignup>();
+  const { handleSignup } = useAuth();
 
   const onSubmit = (data: ISignup) => {
-    signupApi(data).then((res) => {
-      alert(`${data.name}님 ${res.data.message}`);
-        navigate('/users/login');
-      }
-    ).catch((err) => {
-      alert(err);
-      console.log(err);
-    })
+    handleSignup(data, setError)
+      .catch(() => {});
   };
 
 
   return (
     <>
-      <Title bottomsize="60px">회원가입</Title>
+      <Title bottomsize="40px">회원가입</Title>
       <SignupStyled onSubmit={ handleSubmit(onSubmit) }>
+        {errors.root?.message && <p className='error-server'>{errors.root.message}</p>}
         <div className="input">
-          <Input label="이메일" placeholder="아이디를 입력해 주세요." type="email"
-                 { ...register('email', { required: '이메일을 입력해 주세요.' }) }
+          <FormInput
+            name="email"
+            label="이메일"
+            placeholder="이메일을 입력해 주세요."
+            type="email"
+            register={ register }
+            validation={emailValidation}
+            errors={ errors.email }
           />
-          <Input label="이름" placeholder="이름를 입력해 주세요." type="text"
-                 { ...register('name', { required: '이름를 입력해 주세요.' }) }
+          <FormInput
+            name="name"
+            label="이름"
+            placeholder="이름를 입력해 주세요."
+            type="text"
+            register={ register }
+            validation={ nameValidation }
+            errors={ errors.name }
           />
-          <Input label="비밀번호" placeholder="비밀번호를 6자 이상 입력해 주세요." type="password" minLength={6}
-                 { ...register('password', { required: '비밀번호를 6자 이상 입력해 주세요.' }) }
+          <FormInput
+            name="password"
+            label="비밀번호"
+            placeholder="비밀번호를 입력해 주세요."
+            type="password"
+            register={ register }
+            validation={ passwordValidation }
+            errors={ errors.password }
           />
         </div>
         <div className="btn">
-        <Button buttontype="filled" type="submit">회원가입</Button>
+          <Button buttontype="filled" type="submit">회원가입</Button>
         </div>
       </SignupStyled>
     </>
@@ -48,8 +64,8 @@ function Signup() {
 }
 
 const SignupStyled = styled.form`
-    width:100%;
-    
+    width: 100%;
+
     .input {
         display: flex;
         flex-direction: column;
@@ -60,6 +76,15 @@ const SignupStyled = styled.form`
     .btn {
         width: 100%;
         text-align: center;
+    }
+
+    .error-server {
+        text-align: center;
+        color: #ec0000;
+        margin-bottom: 20px;
+        font-size: ${ ({ theme }) => theme.fontSize.text };
+
+        font-weight: 600;
     }
 `;
 

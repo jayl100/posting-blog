@@ -42,7 +42,7 @@ const requestHandler = async <T>(
   config?: T,
 ) => {
   try {
-    console.log(`Request: ${ method.toUpperCase() } ${ url } `, config);
+    // console.log(`Request: ${ method.toUpperCase() } ${ url } `, config);
 
     if (method === 'get' || method === 'delete') {
       const response = await apiClient[method](url);

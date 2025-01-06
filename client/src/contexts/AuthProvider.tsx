@@ -14,13 +14,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = () => {
     setIsAuth(true);
+    location.href = ('/')
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     setIsAuth(false);
     setGetInfo(null);
-    location.href = ('/users/login');
+    location.href = ('/');
   };
 
 

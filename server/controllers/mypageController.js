@@ -61,7 +61,6 @@ const userPosts = async (req, res, next) => {
       return res.status(StatusCodes.OK).json([]);
     }
 
-    console.log(myPosts);
     return res.status(StatusCodes.OK).json(modifiedPosts);
 
   } catch (err) {
@@ -90,7 +89,7 @@ const userDelete = async (req, res, next) => {
 // put: 비밀번호 재설정
 const updatePassword = async (req, res, next) => {
   try {
-    const passwords = await req.body; // oldPassword, newPassword
+    const passwords = await req.body; // oldPassword, newPassword, newPasswordCheck
     const authUser = await req.payload;
 
     if (!passwords) {

@@ -14,12 +14,6 @@ export interface IPost {
   updatedAt: string;
 }
 
-export interface IToken {
-  id: number;
-  token: string;
-  userId: number;
-}
-
 // signup
 export interface ISignup {
   email: string;
@@ -30,6 +24,13 @@ export interface ISignup {
 // login
 export interface ILogin {
   email: string;
+  password: string;
+}
+
+// export type IDeleteUser = Pick<ILogin, 'password'>
+
+// deleteUser
+export interface IDeleteUser {
   password: string;
 }
 
@@ -67,4 +68,10 @@ export interface IChangePassword {
   oldPassword: string;
   newPassword: string;
   newPasswordCheck: string;
+}
+
+export interface IResetPassword {
+  email: string;
+  password: string;
+  passwordCheck: string;
 }

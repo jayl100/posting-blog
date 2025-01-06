@@ -10,7 +10,7 @@ import usePosts from '../hooks/usePosts.ts';
 
 function Home() {
   const { isAuth } = useContext(AuthContext);
-  const { fetchPosts, isPosts } = usePosts();
+  const { fetchPosts, isPosts, isMeta } = usePosts();
   const navigate = useNavigate();
 
 
@@ -47,7 +47,7 @@ function Home() {
               더보기 <IoIosArrowForward />
             </a>
           </div>
-          <PostsList posts={isPosts} />
+          <PostsList posts={isPosts} total={isMeta.totalItems} disable={true}/>
         </div>
       </HomeStyled>
     </>

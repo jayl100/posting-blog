@@ -15,10 +15,10 @@ const userDeleteService = async (authUser, password) => {
     }
 
     if (!matchPassword) {
-      throw new appError('비밀번호를 다시 확인해 주세요..', StatusCodes.BAD_REQUEST);
+      throw new appError('비밀번호를 다시 확인해 주세요..', StatusCodes.NOT_FOUND);
     }
 
-    return await User.destroy({where: {id: matchUser.id}});
+    return await User.destroy({ where: { id: matchUser.id } });
 
   } catch (err) {
     console.error(err);
@@ -28,7 +28,7 @@ const userDeleteService = async (authUser, password) => {
 
 // put: 비밀번호 재설정
 const updatePasswordService = async (authUser, password) => {
-  const { oldPassword, newPassword } = password;
+  const { oldPassword, newPassword, newPasswordCheck } = password;
 
   try {
     const matchUser = await User.findOne({ where: { id: authUser.id } }); // auth유저 찾기
@@ -39,7 +39,11 @@ const updatePasswordService = async (authUser, password) => {
     }
 
     if (!matchPassword) {
-      throw new appError('기본 비밀번호를 확인해 주세요.', StatusCodes.UNAUTHORIZED);
+      throw new appError('현재 비밀번호를 확인해 주세요.', StatusCodes.BAD_REQUEST);
+    }
+
+    if (newPassword !== newPasswordCheck) {
+      throw new appError('새로운 비밀번호가 서로 다릅니다.', StatusCodes.BAD_REQUEST);
     }
 
     if (newPassword.length < 6) {

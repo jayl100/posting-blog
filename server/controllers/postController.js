@@ -119,10 +119,16 @@ const postDelete = async (req, res, next) => {
     const { id } = req.params;
     const authUser = await req.payload;
 
+    if (!authUser) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({message: '게시글 삭제 권한이 없습니다.'})
+    }
+
+    if (!id) {
+    return res.status(StatusCodes.NOT_FOUND).json({ message: '게시글을 찾을 수 없습니다.' });
+    }
+
     await postDeleteService(id, authUser.id);
     return res.status(StatusCodes.OK).json({ message: '게시글이 삭제되었습니다.' });
-
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: '게시글 삭제에 오류가 발생했습니다.' });
 
   } catch (err) {
     next(err);

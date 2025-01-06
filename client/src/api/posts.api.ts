@@ -25,3 +25,8 @@ export const postPutApi = async (postId: number, data: IPost) => {
   const response = await requestHandler('put', `/posts/posting/${postId}`, data)
   return response.data;
 }
+
+export const postDelApi = async (postId: number) => {
+  const response = await requestHandler('delete', `/posts/${postId}`)
+  return response.data;
+}
