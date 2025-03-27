@@ -13,7 +13,7 @@ const usePosts = () => {
     currentPage: 1,
   });
 
-  const fetchPosts = useCallback(async (page: number, limit: number = 8) => {
+  const fetchPosts = useCallback(async (page: number, limit: number = 10) => {
     try {
       const res = await fetchPostsApi(page, limit);
       setIsPosts(res.data);

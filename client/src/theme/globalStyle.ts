@@ -21,6 +21,7 @@ const GlobalStyle = createGlobalStyle`
         -ms-overflow-style: none;
         box-sizing: border-box;
     }
+    
     ::-webkit-scrollbar {
         display: none;
     }
@@ -52,10 +53,10 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         color: inherit;
         resize: none;
+
         &:focus {
             outline: none;
         }
-        
     }
 
 `;

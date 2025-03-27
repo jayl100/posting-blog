@@ -9,7 +9,7 @@ const postList = async (req, res, next) => {
   try {
 
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 8) || 8;
+    const limit = parseInt(req.query.limit, 10) || 10;
     const offset = (page - 1) * limit;
 
     const totalItems = await Posts.count();
@@ -29,7 +29,7 @@ const postList = async (req, res, next) => {
     const totalPages = Math.ceil(totalItems / limit);
 
     const modifiedPosts = posts.map(post => {
-      const raw = post.get({ plain: true }); // 배열 안 복잡하게 꼬여있는 요소 빼내기
+      const raw = post.get({ plain: true });
 
       return {
         id: raw.id,

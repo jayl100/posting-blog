@@ -127,6 +127,7 @@ const TextareaStyled = styled.textarea<{ $errorColor?: string }>`
     height: 400px;
     padding: 40px 20px;
     font-size: ${ ({ theme }) => theme.fontSize.text };
+    line-height: 1.6;
 
     &::placeholder {
         color: ${ props => props.$errorColor || '#fff' };

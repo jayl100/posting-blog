@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import Button from '../../components/buttons/Button.tsx';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
 import Title from '../../components/Title.tsx';
-import { ILogin, IResetPassword } from '../../type/type.ts';
+import { IResetPassword } from '../../type/type.ts';
 import useAuth from '../../hooks/useAuth.ts';
 import { emailValidation, passwordConfirmValidation, passwordValidation } from '../../utils/validationRules.ts';
 import FormInput from '../../components/forms/FormInput.tsx';
-import { resetPWApi } from '../../api/auth.api.ts';
-import MyWithdraw from '../../components/mypage/MyWidthdraw.tsx';
 
 
 function PasswordReset() {

@@ -15,29 +15,29 @@ function Home() {
 
 
   useEffect(() => {
-    fetchPosts(1, 4)
+    fetchPosts(1, 8);
   }, []);
 
   const goToLink = () => {
     if (isAuth) {
-      navigate('posts/posting')
+      navigate('posts/posting');
     } else {
-    navigate('users/signup')
+      navigate('users/signup');
     }
-  }
+  };
 
   return (
     <>
       <HomeStyled>
         <div className="main">
           <Title bottomsize="40px">
-            &nbsp;어서오세요~<br/>
-            모두의 BLOG 입니다.
+            모두의 블로그
+            <br />MoBlog 입니다
           </Title>
           {isAuth ?
-          <Button buttontype='filled' onClick={goToLink}>시작하기</Button>
-          :
-            <Button buttontype='filled' onClick={goToLink}>시작하기</Button>
+            <Button buttontype="filled" onClick={goToLink}>시작하기</Button>
+            :
+            <Button buttontype="filled" onClick={goToLink}>시작하기</Button>
           }
         </div>
         <div className="contents">
@@ -47,7 +47,7 @@ function Home() {
               더보기 <IoIosArrowForward />
             </a>
           </div>
-          <PostsList posts={isPosts} total={isMeta.totalItems} disable={true}/>
+          <PostsList posts={isPosts} total={isMeta.totalItems} disable={true} />
         </div>
       </HomeStyled>
     </>
@@ -72,7 +72,7 @@ const HomeStyled = styled.div`
         margin-bottom: 20px;
 
         h2 {
-            font-size: ${ ({ theme }) => theme.fontSize.h2 };
+            font-size: ${({ theme }) => theme.fontSize.h2};
         }
 
         .more {
@@ -82,7 +82,7 @@ const HomeStyled = styled.div`
             font-size: 14px;
 
             &:hover {
-                color: ${ ({ theme }) => theme.color.primary };
+                color: ${({ theme }) => theme.color.primary};
                 font-weight: 500;
             }
         }

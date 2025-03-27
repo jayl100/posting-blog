@@ -1,11 +1,9 @@
 import styled from 'styled-components';
-import logo from '../../assets/BLOG_primary.svg';
+import logo from '/logo.svg';
 import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
 import useAuth from '../../hooks/useAuth.ts';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { IPosting } from '../../type/type.ts';
 
 
 function Header() {
@@ -63,6 +61,10 @@ const Contents = styled.div`
 
     .left {
         width: 33%;
+        
+        a {
+            display: flex;
+        }
     }
 
     .right {

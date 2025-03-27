@@ -13,11 +13,11 @@ function PostListPage() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = parseInt(params.get('page') || '1', 10);
-    const limit = parseInt(params.get('limit') || '8', 10);
+    const limit = parseInt(params.get('limit') || '10', 10);
     fetchPosts(page, limit);
   }, [ location.search, fetchPosts ]);
 
-  const handlePageChange = (page: number, limit: number = 8) => {
+  const handlePageChange = (page: number, limit: number = 10) => {
     navigate(`/posts?page=${ page }&limit=${ limit }`);
   }
 

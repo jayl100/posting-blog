@@ -2,7 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 const theme: DefaultTheme = {
   color: {
-    primary: '#F42A67',
+    primary: '#5188FF',
     secondary: '#222',
     lightGrey: '#999',
     mediumGrey: '#444',
@@ -41,7 +41,7 @@ const theme: DefaultTheme = {
       border: 0,
       color: '#fff',
       hover: {
-        backgroundColor: '#F42A67',
+        backgroundColor: '#5188FF',
       }
     },
     outlined: {
@@ -54,8 +54,8 @@ const theme: DefaultTheme = {
       color: '#222',
       hover: {
         backgroundColor: '#fff',
-        color: '#F42A67',
-        border: '2px solid #F42A67',
+        color: '#5188FF',
+        border: '2px solid #5188FF',
       }
     },
     sFilled: {
@@ -67,7 +67,7 @@ const theme: DefaultTheme = {
       border: 0,
       color: '#fff',
       hover: {
-        backgroundColor: '#F42A67',
+        backgroundColor: '#5188FF',
       }
     },
     sOutlined: {
@@ -80,8 +80,8 @@ const theme: DefaultTheme = {
       color: '#222',
       hover: {
         backgroundColor: '#fff',
-        color: '#F42A67',
-        border: '2px solid #F42A67',
+        color: '#5188FF',
+        border: '2px solid #5188FF',
       }
     },
   },

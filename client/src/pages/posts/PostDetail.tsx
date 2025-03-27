@@ -96,6 +96,7 @@ const PostDetailStyled = styled.div`
             word-break: break-word;
             line-height: 1.6;
             color: ${ ({ theme }) => theme.color.mediumGrey };
+            white-space: pre-wrap;
         }
     }
 

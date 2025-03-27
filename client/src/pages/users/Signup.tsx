@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import Input from '../../components/forms/Input.tsx';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/buttons/Button.tsx';
 import { useForm } from 'react-hook-form';
 import { ISignup } from '../../type/type.ts';
@@ -8,8 +6,6 @@ import Title from '../../components/Title.tsx';
 import { emailValidation, nameValidation, passwordValidation } from '../../utils/validationRules.ts';
 import useAuth from '../../hooks/useAuth.ts';
 import FormInput from '../../components/forms/FormInput.tsx';
-import React from 'react';
-
 
 function Signup() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm<ISignup>();

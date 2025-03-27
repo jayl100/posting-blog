@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import logo from '../../assets/BLOG_footer.svg';
+import logo from '/logo_white.svg';
 import { useContext } from 'react';
 import AuthContext from '../../contexts/authContext.ts';
 
@@ -16,7 +16,7 @@ function Footer() {
                 <img src={ logo } alt="" />
               </div>
               <p>
-                Copyright 2024. BLOG All pictures cannot be copied without permission.
+                Copyright 2025. BLOG All pictures cannot be copied without permission.
               </p>
             </div>
             <div className="right">
@@ -64,6 +64,10 @@ const MaxWidthContainer = styled.div`
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            
+            img {
+                width: 120px;
+            }
         }
 
         .right {

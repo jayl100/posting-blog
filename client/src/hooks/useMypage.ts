@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { IChangePassword, IDeleteUser } from '../type/type.ts';
 import { userChangePWApi, userDeleteApi } from '../api/mypage.api.ts';
 import { useNavigate } from 'react-router-dom';
