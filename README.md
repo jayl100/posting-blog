@@ -1,7 +1,7 @@
 
 # 모두의 블로그 : MoBlog
 
-![main_video](/client/public/MoBlog.mp4)
+![main_video](/client/public/MoBlog.gif)
 
 ---
 
